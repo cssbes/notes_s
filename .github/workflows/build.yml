@@ -40,7 +40,6 @@ jobs:
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO \
             PROVISIONING_PROFILE_SPECIFIER="" \
-            DEBUG_INFORMATION_FORMAT=dwarf \
             2>&1
 
       - name: Verify archive exists

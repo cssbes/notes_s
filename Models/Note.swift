@@ -47,7 +47,7 @@ final class Note {
 
     func updateStatistics() {
         characterCount = content.count
-        wordCount = content.components(separatedBy: .whitespacesAndNewlines).filter { !$0.isEmpty }.count
+        wordCount = content.split { $0.isWhitespace || $0.isNewline }.count
         let wordsPerMinute = 200
         readingTime = max(1, Int(ceil(Double(wordCount) / Double(wordsPerMinute))))
     }

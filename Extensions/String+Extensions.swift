@@ -18,7 +18,7 @@ extension String {
     }
 
     func removingExtraSpaces() -> String {
-        components(separatedBy: .whitespacesAndNewlines)
+        split { $0.isWhitespace || $0.isNewline }
             .filter { !$0.isEmpty }
             .joined(separator: " ")
     }
