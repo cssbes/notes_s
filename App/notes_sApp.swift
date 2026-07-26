@@ -1,33 +1,13 @@
 import SwiftUI
-import SwiftData
 
 @main
 struct NotesApp: App {
-    @State private var coordinator: AppCoordinator?
-    @State private var initializationError: String?
+    @State private var coordinator = AppCoordinator(container: AppDependencyContainer())
 
     var body: some Scene {
         WindowGroup {
-            if let error = initializationError {
-                ContentUnavailableView(
-                    "Initialization Failed",
-                    systemImage: "exclamationmark.triangle",
-                    description: Text(error)
-                )
-            } else if let coordinator {
-                MainTabView(coordinator: coordinator)
-                    .environment(coordinator)
-            } else {
-                ProgressView("Loading...")
-                    .task {
-                        do {
-                            let container = try AppDependencyContainer()
-                            self.coordinator = AppCoordinator(container: container)
-                        } catch {
-                            self.initializationError = error.localizedDescription
-                        }
-                    }
-            }
+            MainTabView(coordinator: coordinator)
+                .environment(coordinator)
         }
     }
 }

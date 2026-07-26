@@ -1,35 +1,29 @@
 import Foundation
 import SwiftData
 
-actor SwiftDataStack {
+enum SwiftDataStack {
     static let shared = SwiftDataStack()
 
-    private init() {}
-
-    nonisolated var container: ModelContainer {
-        get throws {
-            let schema = Schema([
-                Note.self,
-                Folder.self,
-                Tag.self,
-                NoteBlock.self,
-                AppSettings.self
-            ])
-            let modelConfiguration = ModelConfiguration(
-                schema: schema,
-                isStoredInMemoryOnly: false,
-                allowsSave: true
-            )
+    static var container: ModelContainer = {
+        let schema = Schema([
+            Note.self,
+            Folder.self,
+            Tag.self,
+            NoteBlock.self,
+            AppSettings.self
+        ])
+        let modelConfiguration = ModelConfiguration(
+            schema: schema,
+            isStoredInMemoryOnly: false,
+            allowsSave: true
+        )
+        do {
             return try ModelContainer(
                 for: schema,
                 configurations: [modelConfiguration]
             )
+        } catch {
+            fatalError("Failed to create ModelContainer: \(error.localizedDescription)")
         }
-    }
-
-    nonisolated func createContext() throws -> ModelContext {
-        let context = ModelContext(try container)
-        context.autosaveEnabled = true
-        return context
-    }
+    }()
 }

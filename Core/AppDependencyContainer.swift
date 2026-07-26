@@ -9,8 +9,8 @@ final class AppDependencyContainer {
     let exportService: ExportService
     let backupService: BackupService
 
-    init() throws {
-        let container = try SwiftDataStack.shared.container
+    init() {
+        let container = SwiftDataStack.container
         let context = ModelContext(container)
         context.autosaveEnabled = true
         self.context = context
