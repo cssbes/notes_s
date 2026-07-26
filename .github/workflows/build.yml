@@ -21,6 +21,13 @@ jobs:
         with:
           xcode-version: '26'
 
+      - name: Show build environment
+        run: |
+          echo "=== Xcode ===" && xcodebuild -version
+          echo "=== Swift ===" && swift --version
+          echo "=== SDKs ===" && xcodebuild -showsdks
+          echo "=== Schemes ===" && xcodebuild -list
+
       - name: Build unsigned archive
         run: |
           xcodebuild clean archive \
@@ -33,9 +40,18 @@ jobs:
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO \
             PROVISIONING_PROFILE_SPECIFIER="" \
-            2>&1
+            2>&1 | tee $RUNNER_TEMP/build.log
+
+      - name: Show all errors from build
+        if: always()
+        run: |
+          echo "=== ERROR LINES ==="
+          grep -n "error:" $RUNNER_TEMP/build.log | head -50
+          echo "=== BUILD RESULT ==="
+          grep -E "ARCHIVE (SUCCEEDED|FAILED)|BUILD (SUCCEEDED|FAILED)" $RUNNER_TEMP/build.log
 
       - name: Export unsigned IPA
+        if: success()
         run: |
           xcodebuild -exportArchive \
             -archivePath $RUNNER_TEMP/notes_s.xcarchive \
@@ -44,6 +60,7 @@ jobs:
             2>&1
 
       - name: Upload IPA as artifact
+        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: notes_s-unsigned
