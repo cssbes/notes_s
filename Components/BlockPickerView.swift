@@ -15,9 +15,9 @@ struct BlockPickerView: View {
                         VStack(spacing: 6) {
                             Image(systemName: type.systemImage)
                                 .font(.title3)
-                                .foregroundStyle(.accent)
+                                .foregroundStyle(.tint)
                                 .frame(width: 44, height: 44)
-                                .background(.accent.opacity(0.1))
+                                .background(.tint.opacity(0.1))
                                 .cornerRadius(10)
 
                             Text(type.displayName)

@@ -58,7 +58,7 @@ struct FolderListView: View {
                 }
             }
         }
-        .sheet($showCreateSheet) {
+        .sheet(isPresented: $showCreateSheet) {
             createFolderSheet
         }
         .onAppear { viewModel.loadFolders() }

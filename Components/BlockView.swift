@@ -157,7 +157,7 @@ struct ChecklistBlockView: View {
             Button {
             } label: {
                 Image(systemName: block.isChecked ? "checkmark.circle.fill" : "circle")
-                    .foregroundStyle(block.isChecked ? .accentColor : .secondary)
+                    .foregroundStyle(block.isChecked ? .tint : .secondary)
                     .font(.body)
             }
             .buttonStyle(.plain)
@@ -189,7 +189,7 @@ struct QuoteBlockView: View {
     var body: some View {
         HStack(alignment: .top, spacing: 0) {
             Rectangle()
-                .fill(.accentColor)
+                .fill(.tint)
                 .frame(width: 3)
                 .cornerRadius(1.5)
 

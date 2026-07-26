@@ -20,15 +20,15 @@ enum HapticManager {
         generator.selectionChanged()
     }
 
-    static func success() {
+    @MainActor static func success() {
         notification(type: .success)
     }
 
-    static func error() {
+    @MainActor static func error() {
         notification(type: .error)
     }
 
-    static func warning() {
+    @MainActor static func warning() {
         notification(type: .warning)
     }
 }

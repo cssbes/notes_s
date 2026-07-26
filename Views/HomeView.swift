@@ -42,7 +42,7 @@ struct HomeView: View {
             }
             .searchable(text: .constant(""), prompt: "Search notes")
             .onAppear { viewModel.loadData() }
-            .sheet($showFolderSheet) {
+            .sheet(isPresented: $showFolderSheet) {
                 createFolderSheet
             }
         }
@@ -231,7 +231,7 @@ struct FolderCardView: View {
         HStack(spacing: 12) {
             Image(systemName: folder.icon)
                 .font(.title3)
-                .foregroundStyle(.accent)
+                .foregroundStyle(.tint)
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(folder.name)

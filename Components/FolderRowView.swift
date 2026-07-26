@@ -13,9 +13,9 @@ struct FolderRowView: View {
         HStack(spacing: 12) {
             Image(systemName: folder.icon)
                 .font(.system(size: 16, weight: .medium))
-                .foregroundStyle(.accent)
+                .foregroundStyle(.tint)
                 .frame(width: 28, height: 28)
-                .background(.accent.opacity(0.1))
+                .background(.tint.opacity(0.1))
                 .cornerRadius(6)
 
             VStack(alignment: .leading, spacing: 2) {

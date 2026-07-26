@@ -6,7 +6,7 @@ struct NotesApp: App {
 
     var body: some Scene {
         WindowGroup {
-            MainTabView(coordinator: coordinator)
+            MainTabView()
                 .environment(coordinator)
         }
     }
