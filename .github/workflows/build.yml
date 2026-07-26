@@ -1,32 +1,38 @@
-name: Build IPA
+name: Build unsigned IPA
 
 on:
   push:
-    branches: [ main ]
+    branches: [ '*' ]
   pull_request:
-    branches: [ main ]
+    branches: [ '*' ]
   workflow_dispatch:
 
 jobs:
   build:
-    name: Build unsigned IPA
-    runs-on: macos-15
-    strategy:
-      matrix:
-        xcode: [16]
+    name: Build unsigned IPA (Xcode 16, Swift 6)
+    runs-on: macos-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Select Xcode version
-        run: sudo xcode-select -s /Applications/Xcode_${{ matrix.xcode }}.app/Contents/Developer
+      - name: Select Xcode 16
+        run: |
+          sudo xcode-select -s /Applications/Xcode_16.app/Contents/Developer
+          echo "Xcode selected: $(xcode-select -p)"
 
-      - name: Show Xcode version
-        run: xcodebuild -version
+      - name: Show build environment
+        run: |
+          xcodebuild -version
+          swift --version
+          echo "macOS: $(sw_vers -productVersion)"
 
-      - name: Show Swift version
-        run: swift --version
+      - name: Resolve package dependencies (if any)
+        run: |
+          xcodebuild -resolvePackageDependencies \
+            -project notes_s.xcodeproj \
+            -scheme notes_s \
+            -clonedSourcePackagesDirPath .build
 
       - name: Build unsigned archive
         run: |
@@ -34,22 +40,56 @@ jobs:
             -project notes_s.xcodeproj \
             -scheme notes_s \
             -configuration Release \
-            -archivePath build/notes_s.xcarchive \
+            -archivePath $RUNNER_TEMP/notes_s.xcarchive \
+            -derivedDataPath $RUNNER_TEMP/DerivedData \
+            -clonedSourcePackagesDirPath .build \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGNING_ALLOWED=NO
+            CODE_SIGNING_ALLOWED=NO \
+            PROVISIONING_PROFILE_SPECIFIER="" \
+            DEBUG_INFORMATION_FORMAT=dwarf \
+            GCC_OPTIMIZATION_LEVEL=s \
+            SWIFT_COMPILATION_MODE=wholemodule \
+            | tee xcodebuild_archive.log
+
+      - name: Verify archive exists
+        run: |
+          if [ ! -d "$RUNNER_TEMP/notes_s.xcarchive" ]; then
+            echo "❌ Archive not found at $RUNNER_TEMP/notes_s.xcarchive"
+            exit 1
+          fi
+          echo "✅ Archive created successfully"
+          ls -la "$RUNNER_TEMP/notes_s.xcarchive"
 
       - name: Export unsigned IPA
         run: |
-          mkdir -p build/ipa
+          mkdir -p $RUNNER_TEMP/ipa
           xcodebuild -exportArchive \
-            -archivePath build/notes_s.xcarchive \
-            -exportPath build/ipa \
-            -exportOptionsPlist ExportOptions.plist
+            -archivePath $RUNNER_TEMP/notes_s.xcarchive \
+            -exportPath $RUNNER_TEMP/ipa \
+            -exportOptionsPlist ExportOptions.plist \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO \
+            | tee xcodebuild_export.log
 
-      - name: Upload IPA artifact
+      - name: Locate and verify IPA
+        run: |
+          echo "Looking for IPA in $RUNNER_TEMP/ipa..."
+          ls -laR "$RUNNER_TEMP/ipa"
+          IPA_PATH=$(find "$RUNNER_TEMP/ipa" -name "*.ipa" -type f | head -1)
+          if [ -z "$IPA_PATH" ]; then
+            echo "❌ No IPA file found in $RUNNER_TEMP/ipa"
+            exit 1
+          fi
+          echo "✅ IPA found at: $IPA_PATH"
+          echo "IPA size: $(du -h "$IPA_PATH" | cut -f1)"
+          echo "IPA_PATH=$IPA_PATH" >> $GITHUB_ENV
+
+      - name: Upload IPA as build artifact
         uses: actions/upload-artifact@v4
         with:
-          name: notes_s-unsigned
-          path: build/ipa/notes_s.ipa
+          name: notes_s-unsigned-ipa
+          path: ${{ env.IPA_PATH }}
           compression-level: 0
+          if-no-files-found: error
