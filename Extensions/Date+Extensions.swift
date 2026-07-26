@@ -7,8 +7,11 @@ extension Date {
         return formatter.localizedString(for: self, relativeTo: Date())
     }
 
-    func formatted(dateStyle: Date.FormatStyle.DateStyle = .abbreviated, timeStyle: Date.FormatStyle.TimeStyle = .short) -> String {
-        self.formatted(date: dateStyle, time: timeStyle)
+    func formatted(dateStyle: DateFormatter.Style = .medium, timeStyle: DateFormatter.Style = .short) -> String {
+        let formatter = DateFormatter()
+        formatter.dateStyle = dateStyle
+        formatter.timeStyle = timeStyle
+        return formatter.string(from: self)
     }
 
     var isToday: Bool {

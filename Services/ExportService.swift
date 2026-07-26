@@ -51,7 +51,10 @@ final class ExportService {
         }
 
         md += "\n---\n"
-        md += "Exported from Notes on \(Date().formatted(date: .long, time: .short))\n"
+        let formatter = DateFormatter()
+        formatter.dateStyle = .long
+        formatter.timeStyle = .short
+        md += "Exported from Notes on \(formatter.string(from: Date()))\n"
 
         guard let data = md.data(using: .utf8) else {
             throw ExportError.encodingFailed
