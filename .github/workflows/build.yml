@@ -23,6 +23,7 @@ jobs:
 
       - name: Build unsigned archive
         run: |
+          set -o pipefail
           xcodebuild clean archive \
             -project notes_s.xcodeproj \
             -scheme notes_s \
@@ -32,16 +33,7 @@ jobs:
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO \
-            PROVISIONING_PROFILE_SPECIFIER="" \
-            2>&1 | tee "$RUNNER_TEMP/build.log"
-
-      - name: Archive build log on failure
-        if: failure()
-        run: |
-          echo "ARCHIVE FAILED. Errors from build log:"
-          grep -n "error:" "$RUNNER_TEMP/build.log" | head -30
-          echo "---"
-          grep -E "(ARCHIVE|BUILD) (SUCCEEDED|FAILED)" "$RUNNER_TEMP/build.log"
+            PROVISIONING_PROFILE_SPECIFIER="" | tee "$RUNNER_TEMP/build.log"
 
       - name: Export unsigned IPA
         if: success()
@@ -49,7 +41,7 @@ jobs:
           xcodebuild -exportArchive \
             -archivePath "$RUNNER_TEMP/notes_s.xcarchive" \
             -exportPath "$RUNNER_TEMP/ipa" \
-            -exportOptionsPlist ExportOptions.plist
+            -exportOptionsPlist ExportOptions.plist | tee "$RUNNER_TEMP/export.log"
 
       - name: Upload IPA as artifact
         if: success()
@@ -57,3 +49,11 @@ jobs:
         with:
           name: notes_s-unsigned
           path: ${{ runner.temp }}/ipa/*.ipa
+
+      - name: Show errors on failure
+        if: failure()
+        run: |
+          echo "=== BUILD ERRORS ==="
+          grep -n "error:" "$RUNNER_TEMP/build.log" 2>/dev/null | head -30
+          echo "=== EXPORT ERRORS ==="
+          grep -n "error:" "$RUNNER_TEMP/export.log" 2>/dev/null | head -30
