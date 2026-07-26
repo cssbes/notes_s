@@ -21,10 +21,22 @@ jobs:
         with:
           xcode-version: '26'
 
-      - name: Build unsigned archive
-        continue-on-error: true
+      - name: Compile check
         run: |
-          set -o pipefail
+          xcodebuild build \
+            -project notes_s.xcodeproj \
+            -scheme notes_s \
+            -configuration Release \
+            -derivedDataPath "$RUNNER_TEMP/DerivedData" \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO \
+            PROVISIONING_PROFILE_SPECIFIER="" \
+            -quiet 2>&1
+
+      - name: Build unsigned archive
+        if: success()
+        run: |
           xcodebuild clean archive \
             -project notes_s.xcodeproj \
             -scheme notes_s \
@@ -34,19 +46,7 @@ jobs:
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO \
-            PROVISIONING_PROFILE_SPECIFIER="" \
-            2>&1 | tee "$RUNNER_TEMP/build.log"
-
-      - name: Show all errors in summary
-        if: always()
-        run: |
-          echo "# Build Errors" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
-          grep -n "error:" "$RUNNER_TEMP/build.log" | head -60 >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          grep -E "(ARCHIVE|BUILD) (SUCCEEDED|FAILED)" "$RUNNER_TEMP/build.log" >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
+            PROVISIONING_PROFILE_SPECIFIER=""
 
       - name: Export unsigned IPA
         if: success()
