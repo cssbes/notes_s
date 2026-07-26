@@ -50,7 +50,7 @@ struct NoteRowView: View {
                             .foregroundStyle(.white)
                             .padding(.horizontal, 6)
                             .padding(.vertical, 2)
-                            .background(Color(hex: tag.colorHex) ?? .accentColor)
+                            .background(Color(hex: tag.colorHex) ?? .blue)
                             .cornerRadius(4)
                     }
                 }

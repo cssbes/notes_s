@@ -19,7 +19,7 @@ extension Color {
     }
 
     static var accent: Color {
-        .accentColor
+        .blue
     }
 
     static var cardBackground: Color {

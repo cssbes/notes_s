@@ -7,7 +7,7 @@ struct TagView: View {
     var body: some View {
         HStack(spacing: 4) {
             Circle()
-                .fill(Color(hex: tag.colorHex) ?? .accentColor)
+                .fill(Color(hex: tag.colorHex) ?? .blue)
                 .frame(width: 8, height: 8)
 
             Text(tag.name)
@@ -17,14 +17,14 @@ struct TagView: View {
         .padding(.horizontal, 10)
         .padding(.vertical, 4)
         .background(
-            (Color(hex: tag.colorHex) ?? .accentColor)
+            (Color(hex: tag.colorHex) ?? .blue)
                 .opacity(isSelected ? 0.15 : 0.08)
         )
         .cornerRadius(8)
         .overlay(
             RoundedRectangle(cornerRadius: 8)
                 .stroke(
-                    (Color(hex: tag.colorHex) ?? .accentColor)
+                    (Color(hex: tag.colorHex) ?? .blue)
                         .opacity(isSelected ? 0.5 : 0.1),
                     lineWidth: 1
                 )
