@@ -24,8 +24,3 @@ extension String {
     }
 }
 
-extension String {
-    subscript(_ index: Int) -> Character {
-        self[self.index(startIndex, offsetBy: index)]
-    }
-}

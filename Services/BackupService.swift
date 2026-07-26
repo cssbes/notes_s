@@ -146,26 +146,26 @@ final class BackupService {
         var folderMap: [UUID: Folder] = [:]
         var tagMap: [UUID: Tag] = [:]
 
+        let allExistingTags = try context.fetch(FetchDescriptor<Tag>())
+        let allExistingFolders = try context.fetch(FetchDescriptor<Folder>())
+        let allExistingNotes = try context.fetch(FetchDescriptor<Note>())
+
+        let existingTagIDs = Set(allExistingTags.map(\.id))
+        let existingFolderIDs = Set(allExistingFolders.map(\.id))
+        let existingNoteIDs = Set(allExistingNotes.map(\.id))
+
         for backupTag in backupData.tags {
-            let existing: [Tag] = try context.fetch(
-                FetchDescriptor<Tag>(predicate: #Predicate { $0.id == backupTag.id })
-            )
-            if existing.isEmpty {
-                let tag = Tag(name: backupTag.name, colorHex: backupTag.colorHex)
-                context.insert(tag)
-                tagMap[backupTag.id] = tag
-            }
+            guard !existingTagIDs.contains(backupTag.id) else { continue }
+            let tag = Tag(name: backupTag.name, colorHex: backupTag.colorHex)
+            context.insert(tag)
+            tagMap[backupTag.id] = tag
         }
 
         for backupFolder in backupData.folders {
-            let existing: [Folder] = try context.fetch(
-                FetchDescriptor<Folder>(predicate: #Predicate { $0.id == backupFolder.id })
-            )
-            if existing.isEmpty {
-                let folder = Folder(name: backupFolder.name, icon: backupFolder.icon)
-                context.insert(folder)
-                folderMap[backupFolder.id] = folder
-            }
+            guard !existingFolderIDs.contains(backupFolder.id) else { continue }
+            let folder = Folder(name: backupFolder.name, icon: backupFolder.icon)
+            context.insert(folder)
+            folderMap[backupFolder.id] = folder
         }
 
         for backupFolder in backupData.folders {
@@ -176,20 +176,16 @@ final class BackupService {
         }
 
         for backupNote in backupData.notes {
-            let existing: [Note] = try context.fetch(
-                FetchDescriptor<Note>(predicate: #Predicate { $0.id == backupNote.id })
-            )
-            if existing.isEmpty {
-                let note = Note(title: backupNote.title, content: backupNote.content)
-                note.createdAt = backupNote.createdAt
-                note.updatedAt = backupNote.updatedAt
-                note.isFavorite = backupNote.isFavorite
-                note.isArchived = backupNote.isArchived
-                note.isTrashed = backupNote.isTrashed
-                note.folder = folderMap[backupNote.folderID ?? UUID()]
-                note.tags = backupNote.tagIDs.compactMap { tagMap[$0] }
-                context.insert(note)
-            }
+            guard !existingNoteIDs.contains(backupNote.id) else { continue }
+            let note = Note(title: backupNote.title, content: backupNote.content)
+            note.createdAt = backupNote.createdAt
+            note.updatedAt = backupNote.updatedAt
+            note.isFavorite = backupNote.isFavorite
+            note.isArchived = backupNote.isArchived
+            note.isTrashed = backupNote.isTrashed
+            note.folder = folderMap[backupNote.folderID ?? UUID()]
+            note.tags = backupNote.tagIDs.compactMap { tagMap[$0] }
+            context.insert(note)
         }
 
         try context.save()
