@@ -76,7 +76,7 @@ final class NoteEditorViewModel {
         guard content != lastSavedContent else { return }
 
         autoSaveTask?.cancel()
-        autoSaveTask = Task { [weak self] in
+        autoSaveTask = Task { @MainActor [weak self] in
             try? await Task.sleep(for: .seconds(1.5))
             guard let self, !Task.isCancelled else { return }
             self.save()
