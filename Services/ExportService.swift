@@ -15,7 +15,7 @@ enum ExportError: LocalizedError {
     }
 }
 
-final class ExportService {
+@MainActor final class ExportService {
 
     func exportToMarkdown(_ note: Note) throws -> Data {
         var md = "# \(note.title)\n\n"
