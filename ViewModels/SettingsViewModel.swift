@@ -18,7 +18,7 @@ final class SettingsViewModel {
 
     var formattedLastBackup: String {
         guard let date = lastBackupDate else { return "Never" }
-        return date.formatted(date: .abbreviated, time: .short)
+        let f = DateFormatter(); f.dateStyle = .short; f.timeStyle = .short; return f.string(from: date)
     }
 
     init(noteService: NoteService, backupService: BackupService) {
