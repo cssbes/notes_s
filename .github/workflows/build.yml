@@ -22,10 +22,7 @@ jobs:
           xcode-version: '26'
 
       - name: Build unsigned archive
-        id: build
-        continue-on-error: true
         run: |
-          set +e
           xcodebuild clean archive \
             -project notes_s.xcodeproj \
             -scheme notes_s \
@@ -35,21 +32,9 @@ jobs:
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO \
-            PROVISIONING_PROFILE_SPECIFIER="" \
-            2>&1 | tee "$RUNNER_TEMP/build.log"
-          exitcode=${PIPESTATUS[0]}
-          echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
-          exit $exitcode
-
-      - name: Upload build log
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-log
-          path: ${{ runner.temp }}/build.log
+            PROVISIONING_PROFILE_SPECIFIER=""
 
       - name: Export unsigned IPA
-        if: steps.build.outputs.exitcode == '0'
         run: |
           xcodebuild -exportArchive \
             -archivePath "$RUNNER_TEMP/notes_s.xcarchive" \
@@ -57,7 +42,6 @@ jobs:
             -exportOptionsPlist ExportOptions.plist
 
       - name: Upload IPA as artifact
-        if: steps.build.outputs.exitcode == '0'
         uses: actions/upload-artifact@v4
         with:
           name: notes_s-unsigned
