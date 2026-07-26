@@ -21,7 +21,7 @@ jobs:
         with:
           xcode-version: '26'
 
-      - name: Compile check
+      - name: Build and show errors
         run: |
           xcodebuild build \
             -project notes_s.xcodeproj \
@@ -32,7 +32,11 @@ jobs:
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO \
             PROVISIONING_PROFILE_SPECIFIER="" \
-            -quiet 2>&1
+            2>&1 | tee "$RUNNER_TEMP/build.log" || true
+          echo "=== COMPILATION ERRORS ==="
+          grep -n "error:" "$RUNNER_TEMP/build.log" | head -30
+          echo "=== BUILD RESULT ==="
+          grep -E "(BUILD|ARCHIVE) (SUCCEEDED|FAILED)" "$RUNNER_TEMP/build.log" || echo "BUILD FAILED"
 
       - name: Build unsigned archive
         if: success()
