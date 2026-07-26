@@ -1,0 +1,25 @@
+# Xcode
+*.xcworkspace
+xcuserdata/
+DerivedData/
+*.hmap
+*.ipa
+*.xcuserstate
+
+# Swift Package Manager
+.build/
+Package.resolved
+
+# macOS
+.DS_Store
+
+# Build
+build/
+*.app
+*.dSYM.zip
+*.dSYM
+
+# Temporary
+*.swp
+*.swo
+*~

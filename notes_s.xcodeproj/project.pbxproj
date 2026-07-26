@@ -1,0 +1,484 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		10000001 /* notes_sApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000001; };
+		10000002 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000002; };
+		10000003 /* AppDependencyContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000003; };
+		10000004 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000004; };
+		10000005 /* Folder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000005; };
+		10000006 /* Tag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000006; };
+		10000007 /* NoteBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000007; };
+		10000008 /* SortOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000008; };
+		10000009 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000009; };
+		10000010 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000010; };
+		10000011 /* NoteListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000011; };
+		10000012 /* NoteEditorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000012; };
+		10000013 /* FolderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000013; };
+		10000014 /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000014; };
+		10000015 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000015; };
+		10000016 /* TrashViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000016; };
+		10000017 /* ArchiveViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000017; };
+		10000018 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000018; };
+		10000019 /* NoteListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000019; };
+		10000020 /* NoteEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000020; };
+		10000021 /* FolderListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000021; };
+		10000022 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000022; };
+		10000023 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000023; };
+		10000024 /* TrashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000024; };
+		10000025 /* ArchiveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000025; };
+		10000026 /* NoteRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000026; };
+		10000027 /* FolderRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000027; };
+		10000028 /* TagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000028; };
+		10000029 /* EmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000029; };
+		10000030 /* BlockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000030; };
+		10000031 /* BlockPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000031; };
+		10000032 /* FormattingToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000032; };
+		10000033 /* StatisticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000033; };
+		10000034 /* NoteService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000034; };
+		10000035 /* ExportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000035; };
+		10000036 /* BackupService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000036; };
+		10000037 /* SearchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000037; };
+		10000038 /* SwiftDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000038; };
+		10000039 /* Color+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000039; };
+		10000040 /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000040; };
+		10000041 /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000041; };
+		10000042 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000042; };
+		10000043 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000043; };
+		10000044 /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000044; };
+		10000045 /* KeyboardManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000045; };
+		10000047 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 00000047; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		00000001 /* notes_sApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = notes_sApp.swift; sourceTree = "<group>"; };
+		00000002 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
+		00000003 /* AppDependencyContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDependencyContainer.swift; sourceTree = "<group>"; };
+		00000004 /* Note.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
+		00000005 /* Folder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Folder.swift; sourceTree = "<group>"; };
+		00000006 /* Tag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tag.swift; sourceTree = "<group>"; };
+		00000007 /* NoteBlock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteBlock.swift; sourceTree = "<group>"; };
+		00000008 /* SortOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortOption.swift; sourceTree = "<group>"; };
+		00000009 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
+		00000010 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
+		00000011 /* NoteListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteListViewModel.swift; sourceTree = "<group>"; };
+		00000012 /* NoteEditorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteEditorViewModel.swift; sourceTree = "<group>"; };
+		00000013 /* FolderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderViewModel.swift; sourceTree = "<group>"; };
+		00000014 /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
+		00000015 /* SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModel.swift; sourceTree = "<group>"; };
+		00000016 /* TrashViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrashViewModel.swift; sourceTree = "<group>"; };
+		00000017 /* ArchiveViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveViewModel.swift; sourceTree = "<group>"; };
+		00000018 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		00000019 /* NoteListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteListView.swift; sourceTree = "<group>"; };
+		00000020 /* NoteEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteEditorView.swift; sourceTree = "<group>"; };
+		00000021 /* FolderListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderListView.swift; sourceTree = "<group>"; };
+		00000022 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
+		00000023 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		00000024 /* TrashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrashView.swift; sourceTree = "<group>"; };
+		00000025 /* ArchiveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchiveView.swift; sourceTree = "<group>"; };
+		00000026 /* NoteRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteRowView.swift; sourceTree = "<group>"; };
+		00000027 /* FolderRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderRowView.swift; sourceTree = "<group>"; };
+		00000028 /* TagView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagView.swift; sourceTree = "<group>"; };
+		00000029 /* EmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateView.swift; sourceTree = "<group>"; };
+		00000030 /* BlockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockView.swift; sourceTree = "<group>"; };
+		00000031 /* BlockPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockPickerView.swift; sourceTree = "<group>"; };
+		00000032 /* FormattingToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormattingToolbar.swift; sourceTree = "<group>"; };
+		00000033 /* StatisticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsView.swift; sourceTree = "<group>"; };
+		00000034 /* NoteService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteService.swift; sourceTree = "<group>"; };
+		00000035 /* ExportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportService.swift; sourceTree = "<group>"; };
+		00000036 /* BackupService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupService.swift; sourceTree = "<group>"; };
+		00000037 /* SearchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchService.swift; sourceTree = "<group>"; };
+		00000038 /* SwiftDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftDataStack.swift; sourceTree = "<group>"; };
+		00000039 /* Color+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Extensions.swift"; sourceTree = "<group>"; };
+		00000040 /* View+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extensions.swift"; sourceTree = "<group>"; };
+		00000041 /* Date+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extensions.swift"; sourceTree = "<group>"; };
+		00000042 /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
+		00000043 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		00000044 /* HapticManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticManager.swift; sourceTree = "<group>"; };
+		00000045 /* KeyboardManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardManager.swift; sourceTree = "<group>"; };
+		00000046 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		00000047 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		00000048 /* notes_s.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = notes_s.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		20000003 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		30000001 = {
+			isa = PBXGroup;
+			children = (
+				00000046 /* Info.plist */,
+				00000047 /* Assets.xcassets */,
+				30000002 /* App */,
+				30000003 /* Core */,
+				30000004 /* Models */,
+				30000005 /* ViewModels */,
+				30000006 /* Views */,
+				30000007 /* Components */,
+				30000008 /* Services */,
+				30000009 /* Persistence */,
+				30000010 /* Extensions */,
+				30000011 /* Utilities */,
+				30000012 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		30000002 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				00000001 /* notes_sApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		30000003 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				00000002 /* AppCoordinator.swift */,
+				00000003 /* AppDependencyContainer.swift */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		30000004 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				00000004 /* Note.swift */,
+				00000005 /* Folder.swift */,
+				00000006 /* Tag.swift */,
+				00000007 /* NoteBlock.swift */,
+				00000008 /* SortOption.swift */,
+				00000009 /* AppSettings.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		30000005 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				00000010 /* HomeViewModel.swift */,
+				00000011 /* NoteListViewModel.swift */,
+				00000012 /* NoteEditorViewModel.swift */,
+				00000013 /* FolderViewModel.swift */,
+				00000014 /* SearchViewModel.swift */,
+				00000015 /* SettingsViewModel.swift */,
+				00000016 /* TrashViewModel.swift */,
+				00000017 /* ArchiveViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		30000006 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				00000018 /* HomeView.swift */,
+				00000019 /* NoteListView.swift */,
+				00000020 /* NoteEditorView.swift */,
+				00000021 /* FolderListView.swift */,
+				00000022 /* SearchView.swift */,
+				00000023 /* SettingsView.swift */,
+				00000024 /* TrashView.swift */,
+				00000025 /* ArchiveView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		30000007 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				00000026 /* NoteRowView.swift */,
+				00000027 /* FolderRowView.swift */,
+				00000028 /* TagView.swift */,
+				00000029 /* EmptyStateView.swift */,
+				00000030 /* BlockView.swift */,
+				00000031 /* BlockPickerView.swift */,
+				00000032 /* FormattingToolbar.swift */,
+				00000033 /* StatisticsView.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		30000008 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				00000034 /* NoteService.swift */,
+				00000035 /* ExportService.swift */,
+				00000036 /* BackupService.swift */,
+				00000037 /* SearchService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		30000009 /* Persistence */ = {
+			isa = PBXGroup;
+			children = (
+				00000038 /* SwiftDataStack.swift */,
+			);
+			path = Persistence;
+			sourceTree = "<group>";
+		};
+		30000010 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				00000039 /* Color+Extensions.swift */,
+				00000040 /* View+Extensions.swift */,
+				00000041 /* Date+Extensions.swift */,
+				00000042 /* String+Extensions.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		30000011 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				00000043 /* Constants.swift */,
+				00000044 /* HapticManager.swift */,
+				00000045 /* KeyboardManager.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		30000012 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				00000048 /* notes_s.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		40000001 /* notes_s */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 50000002 /* Build configuration list for PBXNativeTarget "notes_s" */;
+			buildPhases = (
+				20000001 /* Sources */,
+				20000002 /* Resources */,
+				20000003 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = notes_s;
+			productName = notes_s;
+			productReference = 00000048 /* notes_s.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		40000002 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1600;
+				LastUpgradeCheck = 1600;
+			};
+			buildConfigurationList = 50000001 /* Build configuration list for PBXProject "notes_s" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 30000001;
+			productRefGroup = 30000012 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				40000001 /* notes_s */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		20000002 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				10000047 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		20000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				10000001 /* notes_sApp.swift in Sources */,
+				10000002 /* AppCoordinator.swift in Sources */,
+				10000003 /* AppDependencyContainer.swift in Sources */,
+				10000004 /* Note.swift in Sources */,
+				10000005 /* Folder.swift in Sources */,
+				10000006 /* Tag.swift in Sources */,
+				10000007 /* NoteBlock.swift in Sources */,
+				10000008 /* SortOption.swift in Sources */,
+				10000009 /* AppSettings.swift in Sources */,
+				10000010 /* HomeViewModel.swift in Sources */,
+				10000011 /* NoteListViewModel.swift in Sources */,
+				10000012 /* NoteEditorViewModel.swift in Sources */,
+				10000013 /* FolderViewModel.swift in Sources */,
+				10000014 /* SearchViewModel.swift in Sources */,
+				10000015 /* SettingsViewModel.swift in Sources */,
+				10000016 /* TrashViewModel.swift in Sources */,
+				10000017 /* ArchiveViewModel.swift in Sources */,
+				10000018 /* HomeView.swift in Sources */,
+				10000019 /* NoteListView.swift in Sources */,
+				10000020 /* NoteEditorView.swift in Sources */,
+				10000021 /* FolderListView.swift in Sources */,
+				10000022 /* SearchView.swift in Sources */,
+				10000023 /* SettingsView.swift in Sources */,
+				10000024 /* TrashView.swift in Sources */,
+				10000025 /* ArchiveView.swift in Sources */,
+				10000026 /* NoteRowView.swift in Sources */,
+				10000027 /* FolderRowView.swift in Sources */,
+				10000028 /* TagView.swift in Sources */,
+				10000029 /* EmptyStateView.swift in Sources */,
+				10000030 /* BlockView.swift in Sources */,
+				10000031 /* BlockPickerView.swift in Sources */,
+				10000032 /* FormattingToolbar.swift in Sources */,
+				10000033 /* StatisticsView.swift in Sources */,
+				10000034 /* NoteService.swift in Sources */,
+				10000035 /* ExportService.swift in Sources */,
+				10000036 /* BackupService.swift in Sources */,
+				10000037 /* SearchService.swift in Sources */,
+				10000038 /* SwiftDataStack.swift in Sources */,
+				10000039 /* Color+Extensions.swift in Sources */,
+				10000040 /* View+Extensions.swift in Sources */,
+				10000041 /* Date+Extensions.swift in Sources */,
+				10000042 /* String+Extensions.swift in Sources */,
+				10000043 /* Constants.swift in Sources */,
+				10000044 /* HapticManager.swift in Sources */,
+				10000045 /* KeyboardManager.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		60000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.notes.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		60000002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_OPTIMIZATION_LEVEL = s;
+				INFOPLIST_FILE = Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = com.notes.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		60000003 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
+				PRODUCT_BUNDLE_IDENTIFIER = com.notes.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		60000004 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
+				PRODUCT_BUNDLE_IDENTIFIER = com.notes.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		50000001 /* Build configuration list for PBXProject "notes_s" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				60000001 /* Debug */,
+				60000002 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		50000002 /* Build configuration list for PBXNativeTarget "notes_s" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				60000003 /* Debug */,
+				60000004 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 40000002 /* Project object */;
+}
