@@ -25,120 +25,58 @@ struct NoteListView: View {
             } else {
                 List(selection: $multiSelection) {
                     ForEach(viewModel.notes) { note in
-                        Button {
-                            coordinator.openNote(note)
-                        } label: {
-                            NoteRowView(note: note)
-                        }
-                        .buttonStyle(.plain)
-                        .contextMenu {
-                            Section {
-                                Button {
-                                    viewModel.toggleFavorite(note)
-                                } label: {
-                                    Label(note.isFavorite ? "Unfavorite" : "Favorite", systemImage: note.isFavorite ? "star.slash" : "star")
+                        Button { coordinator.openNote(note) } label: { NoteRowView(note: note) }
+                            .buttonStyle(.plain)
+                            .contextMenu {
+                                Section {
+                                    Button { viewModel.toggleFavorite(note) } label: {
+                                        Label(note.isFavorite ? "Unfavorite" : "Favorite", systemImage: note.isFavorite ? "star.slash" : "star")
+                                    }
+                                    Button { viewModel.togglePin(note) } label: {
+                                        Label(note.isPinned ? "Unpin" : "Pin", systemImage: note.isPinned ? "pin.slash" : "pin")
+                                    }
                                 }
-                                Button {
-                                    viewModel.togglePin(note)
-                                } label: {
-                                    Label(note.isPinned ? "Unpin" : "Pin", systemImage: note.isPinned ? "pin.slash" : "pin")
+                                Section {
+                                    Button { selectedNote = note; showFolderPicker = true } label: { Label("Move to Folder", systemImage: "folder") }
+                                    Button { viewModel.duplicateNote(note) } label: { Label("Duplicate", systemImage: "doc.on.doc") }
                                 }
-                            }
-                            Section {
-                                Button {
-                                    selectedNote = note
-                                    showFolderPicker = true
-                                } label: {
-                                    Label("Move to Folder", systemImage: "folder")
-                                }
-                                Button {
-                                    duplicateNote(note)
-                                } label: {
-                                    Label("Duplicate", systemImage: "doc.on.doc")
+                                Section {
+                                    Button(role: .destructive) { viewModel.archiveNote(note) } label: { Label("Archive", systemImage: "archivebox") }
+                                    Button(role: .destructive) { viewModel.deleteNote(note) } label: { Label("Delete", systemImage: "trash") }
                                 }
                             }
-                            Section {
-                                Button(role: .destructive) {
-                                    viewModel.archiveNote(note)
-                                } label: {
-                                    Label("Archive", systemImage: "archivebox")
-                                }
-                                Button(role: .destructive) {
-                                    viewModel.deleteNote(note)
-                                } label: {
-                                    Label("Delete", systemImage: "trash")
-                                }
+                            .swipeActions(edge: .leading) {
+                                Button { viewModel.toggleFavorite(note) } label: { Label("Favorite", systemImage: "star") }.tint(.yellow)
+                                Button { viewModel.togglePin(note) } label: { Label("Pin", systemImage: "pin") }.tint(.orange)
                             }
-                        }
-                        .swipeActions(edge: .leading) {
-                            Button {
-                                viewModel.toggleFavorite(note)
-                            } label: {
-                                Label("Favorite", systemImage: "star")
+                            .swipeActions(edge: .trailing) {
+                                Button(role: .destructive) { viewModel.deleteNote(note) } label: { Label("Delete", systemImage: "trash") }
+                                Button { viewModel.archiveNote(note) } label: { Label("Archive", systemImage: "archivebox") }.tint(.gray)
                             }
-                            .tint(.yellow)
-
-                            Button {
-                                viewModel.togglePin(note)
-                            } label: {
-                                Label("Pin", systemImage: "pin")
-                            }
-                            .tint(.orange)
-                        }
-                        .swipeActions(edge: .trailing) {
-                            Button(role: .destructive) {
-                                viewModel.deleteNote(note)
-                            } label: {
-                                Label("Delete", systemImage: "trash")
-                            }
-
-                            Button {
-                                viewModel.archiveNote(note)
-                            } label: {
-                                Label("Archive", systemImage: "archivebox")
-                            }
-                            .tint(.gray)
-                        }
                     }
                 }
                 .listStyle(.plain)
             }
         }
+        .background(Color.nBackground)
         .navigationTitle(viewModel.title)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 HStack(spacing: 8) {
-                    Button {
-                        showSortPicker = true
-                    } label: {
-                        Image(systemName: "arrow.up.arrow.down")
-                    }
-
-                    Button {
-                        coordinator.createNewNote()
-                    } label: {
-                        Image(systemName: "plus")
-                    }
+                    Button { showSortPicker = true } label: { Image(systemName: "arrow.up.arrow.down").foregroundStyle(Color.nAccent) }
+                    Button { coordinator.createNewNote() } label: { Image(systemName: "plus").foregroundStyle(Color.nAccent) }
                 }
             }
         }
         .confirmationDialog("Sort By", isPresented: $showSortPicker) {
             ForEach(SortOption.allCases) { option in
-                Button(option.displayName) {
-                    viewModel.setSortOption(option)
-                }
+                Button(option.displayName) { viewModel.setSortOption(option) }
             }
         }
         .sheet(isPresented: $showFolderPicker) {
-            if let note = selectedNote {
-                folderPickerSheet(for: note)
-            }
+            if let note = selectedNote { folderPickerSheet(for: note) }
         }
         .onAppear { viewModel.loadNotes() }
-    }
-
-    private func duplicateNote(_ note: Note) {
-        viewModel.duplicateNote(note)
     }
 
     private func folderPickerSheet(for note: Note) -> some View {

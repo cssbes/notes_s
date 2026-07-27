@@ -3,14 +3,14 @@ import SwiftUI
 @main
 struct NotesApp: App {
     @State private var coordinator = AppCoordinator(container: AppDependencyContainer())
-    @AppStorage("accentColorHex") private var accentColorHex = "#C77D4A"
+    @AppStorage("accentColorHex") private var accentColorHex = "#007AFF"
     @AppStorage("themeRaw") private var themeRaw = AppTheme.system.rawValue
 
     var body: some Scene {
         WindowGroup {
             MainTabView()
                 .environment(coordinator)
-                .tint(Color(hex: accentColorHex) ?? .orange)
+                .tint(Color(hex: accentColorHex) ?? .blue)
                 .preferredColorScheme(colorScheme)
         }
     }
@@ -32,19 +32,19 @@ struct MainTabView: View {
 
         TabView(selection: $coordinator.selectedTab) {
             HomeView(viewModel: coordinator.container.makeHomeViewModel())
-                .tabItem { Image(systemName: "house"); Text("Home") }
+                .tabItem { Label("Home", systemImage: "house") }
                 .tag(AppCoordinator.Tab.home)
 
             NoteListView(viewModel: coordinator.container.makeNoteListViewModel())
-                .tabItem { Image(systemName: "note.text"); Text("All Notes") }
+                .tabItem { Label("All Notes", systemImage: "note.text") }
                 .tag(AppCoordinator.Tab.folders)
 
             SearchView(viewModel: coordinator.container.makeSearchViewModel())
-                .tabItem { Image(systemName: "magnifyingglass"); Text("Search") }
+                .tabItem { Label("Search", systemImage: "magnifyingglass") }
                 .tag(AppCoordinator.Tab.search)
 
             SettingsView(viewModel: coordinator.container.makeSettingsViewModel())
-                .tabItem { Image(systemName: "gearshape"); Text("Settings") }
+                .tabItem { Label("Settings", systemImage: "gearshape") }
                 .tag(AppCoordinator.Tab.settings)
         }
         .fullScreenCover(isPresented: $coordinator.showNoteEditor) {

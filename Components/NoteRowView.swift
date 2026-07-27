@@ -10,53 +10,38 @@ struct NoteRowView: View {
     }
 
     var body: some View {
-        HStack(spacing: 14) {
-            if !note.emoji.isEmpty {
-                Text(note.emoji)
-                    .font(.title2)
-            }
-
+        HStack(alignment: .top, spacing: 12) {
             VStack(alignment: .leading, spacing: 4) {
                 HStack(spacing: 6) {
                     Text(note.displayTitle)
-                        .font(.system(size: 16, weight: .semibold, design: .rounded))
-                        .foregroundStyle(Color.themeText)
+                        .font(.system(size: 15, weight: .semibold))
+                        .foregroundStyle(Color.nText)
                         .lineLimit(1)
                     Spacer()
-                    if note.isFavorite {
-                        Image(systemName: "star.fill").font(.caption2).foregroundStyle(.yellow)
-                    }
                     if note.isPinned {
-                        Image(systemName: "pin.fill").font(.caption2).foregroundStyle(Color.themeSubtle)
+                        Image(systemName: "pin.fill").font(.system(size: 8)).foregroundStyle(Color.nSecondary)
+                    }
+                    if note.isFavorite {
+                        Image(systemName: "star.fill").font(.system(size: 8)).foregroundStyle(.yellow)
                     }
                 }
-
                 if !note.previewText.isEmpty {
                     Text(note.previewText)
-                        .font(.system(size: 14, design: .rounded))
-                        .foregroundStyle(Color.themeSubtle)
+                        .font(.system(size: 13))
+                        .foregroundStyle(Color.nSecondary)
                         .lineLimit(2)
                 }
-
                 HStack(spacing: 10) {
-                    Text(dateText)
-                        .font(.caption)
-                        .foregroundStyle(Color.themeSubtle)
-
+                    Text(dateText).font(.system(size: 11)).foregroundStyle(Color.nTertiary)
                     if note.wordCount > 0 {
-                        Text("\(note.wordCount)w")
-                            .font(.caption)
-                            .foregroundStyle(Color.themeSubtle)
+                        Text("\(note.wordCount) words").font(.system(size: 11)).foregroundStyle(Color.nTertiary)
                     }
-
                     if !note.tags.isEmpty {
                         ForEach(note.tags.prefix(2)) { tag in
-                            Text(tag.name)
-                                .font(.caption2)
-                                .foregroundStyle(Color.themeAccent)
-                                .padding(.horizontal, 6).padding(.vertical, 2)
-                                .background(Color.themeAccent.opacity(0.1))
-                                .cornerRadius(4)
+                            Text(tag.name).font(.system(size: 10)).foregroundStyle(.white)
+                                .padding(.horizontal, 5).padding(.vertical, 1)
+                                .background(Color(hex: tag.colorHex) ?? .blue)
+                                .cornerRadius(3)
                         }
                     }
                 }

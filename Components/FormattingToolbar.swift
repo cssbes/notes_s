@@ -64,7 +64,7 @@ struct FormattingToolbar: View {
             .padding(.horizontal, 8)
         }
         .frame(height: 44)
-        .background(.ultraThinMaterial)
+        .background(Color.nBackground)
     }
 
     private func toolbarButton(_ icon: String, action: (() -> Void)?) -> some View {
@@ -73,7 +73,7 @@ struct FormattingToolbar: View {
         } label: {
             Image(systemName: icon)
                 .font(.system(size: 14, weight: .medium))
-                .foregroundStyle(.primary)
+                .foregroundStyle(Color.nText)
                 .frame(width: 34, height: 34)
                 .contentShape(Rectangle())
         }

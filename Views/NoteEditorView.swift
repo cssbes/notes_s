@@ -6,8 +6,6 @@ struct NoteEditorView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(AppCoordinator.self) private var coordinator
     @FocusState private var isTitleFocused: Bool
-    @FocusState private var isEditorFocused: Bool
-    @State private var showToolbar = false
 
     init(viewModel: NoteEditorViewModel) {
         self._viewModel = State(initialValue: viewModel)
@@ -15,64 +13,66 @@ struct NoteEditorView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            if showToolbar {
-                FormattingToolbar(
-                    onBold: { formattingController.toggleBold() },
-                    onItalic: { formattingController.toggleItalic() },
-                    onUnderline: { formattingController.toggleUnderline() },
-                    onStrikethrough: { formattingController.toggleStrikethrough() },
-                    onHighlight: { formattingController.toggleHighlight() },
-                    onHeading: { formattingController.applyHeading($0) },
-                    onBulletList: { formattingController.toggleBulletList() },
-                    onNumberedList: { formattingController.toggleNumberedList() },
-                    onChecklist: { formattingController.toggleChecklist() },
-                    onQuote: { formattingController.applyQuote() },
-                    onCode: { formattingController.applyCode() },
-                    onLink: { formattingController.addLink() },
-                    onDivider: { formattingController.insertDivider() },
-                    onImage: { formattingController.insertImagePlaceholder() },
-                    onUndo: { viewModel.undo() },
-                    onRedo: { viewModel.redo() },
-                    canUndo: viewModel.canUndo,
-                    canRedo: viewModel.canRedo
-                )
-                .transition(.move(edge: .top).combined(with: .opacity))
-            }
+            FormattingToolbar(
+                onBold: { formattingController.toggleBold() },
+                onItalic: { formattingController.toggleItalic() },
+                onUnderline: { formattingController.toggleUnderline() },
+                onStrikethrough: { formattingController.toggleStrikethrough() },
+                onHighlight: { formattingController.toggleHighlight() },
+                onHeading: { formattingController.applyHeading($0) },
+                onBulletList: { formattingController.toggleBulletList() },
+                onNumberedList: { formattingController.toggleNumberedList() },
+                onChecklist: { formattingController.toggleChecklist() },
+                onQuote: { formattingController.applyQuote() },
+                onCode: { formattingController.applyCode() },
+                onLink: { formattingController.addLink() },
+                onDivider: { formattingController.insertDivider() },
+                onImage: { formattingController.insertImagePlaceholder() },
+                onUndo: { viewModel.undo() },
+                onRedo: { viewModel.redo() },
+                canUndo: viewModel.canUndo,
+                canRedo: viewModel.canRedo
+            )
+            .padding(.vertical, 6)
+            .background(Color.nSurface)
 
             ScrollView {
                 VStack(spacing: 16) {
-                    titleField
-                    statisticsBar
-                    editorArea
+                    TextField("Title", text: $viewModel.title)
+                        .font(.system(size: 28, weight: .bold))
+                        .textFieldStyle(.plain)
+                        .focused($isTitleFocused)
+
+                    HStack(spacing: 8) {
+                        if viewModel.isSaving {
+                            Image(systemName: "icloud.and.arrow.up").font(.caption2).foregroundStyle(Color.nTertiary)
+                        }
+                        Text("\(viewModel.wordCount) words").font(.caption).foregroundStyle(Color.nTertiary)
+                        Text("\(viewModel.readingTime) min read").font(.caption).foregroundStyle(Color.nTertiary)
+                        Spacer()
+                    }
+
+                    RichTextEditor(htmlContent: $viewModel.content, formattingController: formattingController)
+                        .frame(minHeight: 400)
                 }
                 .padding(20)
             }
         }
-        .background(Color.themeBackground)
-        .navigationTitle("")
-        .navigationBarTitleDisplayMode(.inline)
+        .background(Color.nBackground)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 Button("Done") { viewModel.save(); dismiss() }
-                    .font(.system(size: 15, weight: .medium, design: .rounded))
-                    .foregroundStyle(Color.themeAccent)
-            }
-            ToolbarItem(placement: .principal) {
-                Text(viewModel.note.displayTitle).font(.system(size: 14, design: .rounded)).foregroundStyle(Color.themeSubtle)
+                    .fontWeight(.semibold).foregroundStyle(Color.nAccent)
             }
             ToolbarItem(placement: .topBarTrailing) {
                 HStack(spacing: 12) {
-                    Button { withAnimation(.easeInOut(duration: 0.2)) { showToolbar.toggle() } } label: {
-                        Image(systemName: showToolbar ? "keyboard.chevron.compact.down" : "pencil.tip")
-                            .font(.system(size: 14)).foregroundStyle(Color.themeText)
+                    Button { viewModel.toggleFavorite() } label: {
+                        Image(systemName: viewModel.note.isFavorite ? "star.fill" : "star").foregroundStyle(viewModel.note.isFavorite ? .yellow : Color.nText)
+                    }
+                    Button { viewModel.togglePin() } label: {
+                        Image(systemName: viewModel.note.isPinned ? "pin.fill" : "pin")
                     }
                     Menu {
-                        Button { viewModel.toggleFavorite() } label: {
-                            Label(viewModel.note.isFavorite ? "Unfavorite" : "Favorite", systemImage: viewModel.note.isFavorite ? "star.slash" : "star")
-                        }
-                        Button { viewModel.togglePin() } label: {
-                            Label(viewModel.note.isPinned ? "Unpin" : "Pin", systemImage: viewModel.note.isPinned ? "pin.slash" : "pin")
-                        }
                         Section {
                             Button { viewModel.showEmojiPicker = true } label: { Label("Set Emoji", systemImage: "face.smiling") }
                             Button { viewModel.showColorPicker = true } label: { Label("Set Color", systemImage: "paintpalette") }
@@ -91,7 +91,7 @@ struct NoteEditorView: View {
                         Section {
                             Button(role: .destructive) { viewModel.showDeleteConfirmation = true } label: { Label("Delete", systemImage: "trash") }
                         }
-                    } label: { Image(systemName: "ellipsis").font(.system(size: 14)).foregroundStyle(Color.themeText) }
+                    } label: { Image(systemName: "ellipsis") }
                 }
             }
         }
@@ -104,43 +104,6 @@ struct NoteEditorView: View {
         .sheet(isPresented: $viewModel.showColorPicker) { colorPickerSheet }
         .onChange(of: viewModel.content) { _, _ in viewModel.autoSave() }
         .onDisappear { viewModel.save() }
-    }
-
-    private var titleField: some View {
-        HStack(spacing: 10) {
-            if !viewModel.note.emoji.isEmpty {
-                Text(viewModel.note.emoji).font(.system(size: 28))
-            }
-            VStack(alignment: .leading, spacing: 2) {
-                TextField("Title", text: $viewModel.title)
-                    .font(.system(size: 26, weight: .bold, design: .rounded))
-                    .foregroundStyle(Color.themeText)
-                    .textFieldStyle(.plain)
-                    .focused($isTitleFocused)
-                if !viewModel.isNew {
-                    Text(viewModel.note.createdAt, style: .date)
-                        .font(.caption).foregroundStyle(Color.themeSubtle)
-                }
-            }
-        }
-    }
-
-    private var statisticsBar: some View {
-        HStack(spacing: 8) {
-            if viewModel.isSaving {
-                Image(systemName: "icloud.and.arrow.up").font(.caption2).foregroundStyle(Color.themeSubtle)
-            }
-            Text("\(viewModel.wordCount) words  ·  \(viewModel.readingTime) min").font(.caption).foregroundStyle(Color.themeSubtle)
-            Spacer()
-        }
-    }
-
-    private var editorArea: some View {
-        RichTextEditor(htmlContent: $viewModel.content, formattingController: formattingController)
-            .focused($isEditorFocused)
-            .frame(minHeight: 300)
-            .background(Color.themeSurface)
-            .cornerRadius(12)
     }
 
     private func shareExport(_ data: Data?, name: String) {
@@ -185,11 +148,11 @@ struct FolderPickerView: View {
     var body: some View {
         List {
             Button { onSelect(nil) } label: {
-                HStack { Image(systemName: "tray").foregroundStyle(Color.themeAccent); Text("No Folder"); Spacer(); if selectedFolder == nil { Image(systemName: "checkmark").foregroundStyle(Color.themeAccent) } }
+                HStack { Image(systemName: "tray").foregroundStyle(Color.nAccent); Text("No Folder"); Spacer(); if selectedFolder == nil { Image(systemName: "checkmark").foregroundStyle(Color.nAccent) } }
             }
             ForEach(viewModel.folders) { folder in
                 Button { onSelect(folder) } label: {
-                    HStack { Image(systemName: folder.icon).foregroundStyle(Color.themeAccent); Text(folder.name); Spacer(); if selectedFolder?.id == folder.id { Image(systemName: "checkmark").foregroundStyle(Color.themeAccent) } }
+                    HStack { Image(systemName: folder.icon).foregroundStyle(Color.nAccent); Text(folder.name); Spacer(); if selectedFolder?.id == folder.id { Image(systemName: "checkmark").foregroundStyle(Color.nAccent) } }
                 }
             }
         }
@@ -210,7 +173,7 @@ struct EmojiPickerView: View {
                 ForEach(emojis, id: \.self) { emoji in
                     Button { onSelect(emoji); dismiss() } label: {
                         Text(emoji).font(.system(size: 36)).opacity(emoji == selectedEmoji ? 1 : 0.7)
-                            .overlay(RoundedRectangle(cornerRadius: 8).stroke(emoji == selectedEmoji ? Color.themeAccent : Color.clear, lineWidth: 2))
+                            .overlay(RoundedRectangle(cornerRadius: 8).stroke(emoji == selectedEmoji ? Color.nAccent : Color.clear, lineWidth: 2))
                     }.buttonStyle(.plain)
                 }
             }.padding()
@@ -225,10 +188,9 @@ struct NoteColorPickerView: View {
     let onSelect: (String) -> Void
     @Environment(\.dismiss) private var dismiss
     let colors: [(name: String, hex: String)] = [
-        ("Amber", "#C77D4A"), ("Terra", "#8B6B5C"), ("Slate", "#5C6B7A"),
-        ("Sage", "#6B8B6B"), ("Clay", "#C77D4A"), ("Rust", "#B86C5A"),
-        ("Ochre", "#C99A4A"), ("Moss", "#6B8B5C"), ("Cocoa", "#7A6B5C"),
-        ("Mist", "#9EA8B8"), ("Sand", "#C4B8A8"), ("Dusk", "#8B7A9E")
+        ("Blue", "#007AFF"), ("Green", "#34C759"), ("Orange", "#FF9500"),
+        ("Red", "#FF3B30"), ("Purple", "#AF52DE"), ("Pink", "#FF2D55"),
+        ("Yellow", "#FFCC00"), ("Teal", "#5AC8FA"), ("Indigo", "#5856D6")
     ]
 
     var body: some View {
@@ -237,9 +199,9 @@ struct NoteColorPickerView: View {
                 ForEach(colors, id: \.hex) { color in
                     Button { onSelect(color.hex); dismiss() } label: {
                         VStack(spacing: 6) {
-                            Circle().fill(Color(hex: color.hex) ?? .orange).frame(width: 44, height: 44)
+                            Circle().fill(Color(hex: color.hex) ?? .blue).frame(width: 44, height: 44)
                                 .overlay(Circle().stroke(color.hex == selectedHex ? Color.primary : Color.clear, lineWidth: 3))
-                            Text(color.name).font(.caption2).foregroundStyle(Color.themeSubtle)
+                            Text(color.name).font(.caption2).foregroundStyle(Color.nSecondary)
                         }
                     }.buttonStyle(.plain)
                 }

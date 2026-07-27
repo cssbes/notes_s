@@ -14,13 +14,12 @@ extension Color {
         )
     }
 
-    static let themePrimary = Color(hex: "#C77D4A") ?? .orange
-    static let themeSecondary = Color(hex: "#8B6B5C") ?? .brown
-    static let themeBackground = Color(hex: "#FAF8F5") ?? Color(.systemGroupedBackground)
-    static let themeSurface = Color(.systemBackground)
-    static let themeText = Color(hex: "#2C2416") ?? .primary
-    static let themeSubtle = Color(hex: "#9E917F") ?? .secondary
-    static let themeAccent = Color(hex: "#C77D4A") ?? .orange
-    static let themeCard = Color(hex: "#F5F2ED") ?? Color(.systemGray6)
-    static let themeBorder = Color(hex: "#E8E3DC") ?? Color(.systemGray5)
+    static let nBackground = Color(.systemBackground)
+    static let nSurface = Color(.systemGray6)
+    static let nText = Color(.label)
+    static let nSecondary = Color(.secondaryLabel)
+    static let nTertiary = Color(.tertiaryLabel)
+    static let nAccent = Color(.systemBlue)
+    static let nDivider = Color(.separator).opacity(0.3)
+    static let nCard = Color(.systemGray6)
 }

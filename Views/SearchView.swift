@@ -13,32 +13,32 @@ struct SearchView: View {
             VStack(spacing: 0) {
                 if viewModel.isSearching {
                     Spacer()
-                    ProgressView().tint(Color.themeAccent)
+                    ProgressView().tint(Color.nAccent)
                     Spacer()
                 } else if viewModel.isEmptyQuery {
                     recentSearches
                 } else if !viewModel.hasResults {
                     Spacer()
                     VStack(spacing: 8) {
-                        Image(systemName: "magnifyingglass").font(.system(size: 32)).foregroundStyle(Color.themeSubtle)
-                        Text("No Results").font(.headline).foregroundStyle(Color.themeText)
-                        Text("No notes match \"\(viewModel.query)\"").font(.subheadline).foregroundStyle(Color.themeSubtle)
+                        Image(systemName: "magnifyingglass").font(.system(size: 32)).foregroundStyle(Color.nSecondary)
+                        Text("No Results").font(.headline)
+                        Text("No notes match \"\(viewModel.query)\"").font(.subheadline).foregroundStyle(Color.nSecondary)
                     }
                     Spacer()
                 } else {
                     filterBar
+                    Divider().padding(.horizontal, 20).opacity(0.3)
                     List {
                         ForEach(viewModel.results) { note in
                             Button { coordinator.openNote(note) } label: { NoteRowView(note: note) }
                                 .buttonStyle(.plain)
-                                .listRowBackground(Color.themeCard)
+                                .listRowSeparator(.hidden)
                         }
                     }
                     .listStyle(.plain)
-                    .background(Color.themeBackground)
                 }
             }
-            .background(Color.themeBackground)
+            .background(Color.nBackground)
             .navigationTitle("Search")
             .navigationBarTitleDisplayMode(.inline)
             .searchable(text: $viewModel.query, placement: .navigationBarDrawer(displayMode: .always), prompt: "Search")
@@ -51,39 +51,38 @@ struct SearchView: View {
 
     private var filterBar: some View {
         ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 8) {
+            HStack(spacing: 0) {
                 ForEach(NoteListFilter.allCases) { filter in
                     Button { viewModel.setFilter(filter) } label: {
-                        Text(filter.displayName)
-                            .font(.subheadline)
-                            .fontWeight(viewModel.filter == filter ? .semibold : .regular)
-                            .padding(.horizontal, 14).padding(.vertical, 6)
-                            .background(viewModel.filter == filter ? Color.themeAccent : Color.themeCard)
-                            .foregroundStyle(viewModel.filter == filter ? .white : Color.themeText)
-                            .cornerRadius(8)
+                        VStack(spacing: 8) {
+                            Text(filter.displayName)
+                                .font(.system(size: 13, weight: viewModel.filter == filter ? .semibold : .regular))
+                                .foregroundStyle(viewModel.filter == filter ? Color.nAccent : Color.nSecondary)
+                            Rectangle()
+                                .fill(viewModel.filter == filter ? Color.nAccent : Color.clear)
+                                .frame(height: 2).cornerRadius(1)
+                        }
+                        .fixedSize()
+                        .padding(.horizontal, 14).padding(.vertical, 8)
                     }
                     .buttonStyle(.plain)
                 }
             }
-            .padding(.horizontal, 20).padding(.vertical, 10)
+            .padding(.horizontal, 20)
         }
     }
 
     @ViewBuilder
     private var recentSearches: some View {
         if !viewModel.recentSearches.isEmpty {
-            VStack(alignment: .leading, spacing: 8) {
-                Text("Recent")
-                    .font(.system(size: 13, weight: .semibold, design: .rounded))
-                    .foregroundStyle(Color.themeSubtle)
-                    .textCase(.uppercase)
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Recent").font(.system(size: 12, weight: .semibold)).foregroundStyle(Color.nSecondary).textCase(.uppercase)
                     .padding(.horizontal, 20).padding(.top, 16)
-
                 ForEach(viewModel.recentSearches, id: \.self) { term in
                     Button { viewModel.query = term; viewModel.search() } label: {
                         HStack {
-                            Image(systemName: "clock.arrow.circlepath").foregroundStyle(Color.themeSubtle)
-                            Text(term).foregroundStyle(Color.themeText)
+                            Image(systemName: "clock.arrow.circlepath").font(.caption).foregroundStyle(Color.nSecondary)
+                            Text(term).font(.system(size: 15))
                             Spacer()
                         }
                         .padding(.horizontal, 20).padding(.vertical, 8)
@@ -93,9 +92,9 @@ struct SearchView: View {
             }
         } else {
             VStack(spacing: 8) {
-                Image(systemName: "magnifyingglass").font(.system(size: 32)).foregroundStyle(Color.themeSubtle)
-                Text("Search Notes").font(.headline).foregroundStyle(Color.themeText)
-                Text("Find by title, content, tags, or folders").font(.subheadline).foregroundStyle(Color.themeSubtle)
+                Image(systemName: "magnifyingglass").font(.system(size: 32)).foregroundStyle(Color.nSecondary)
+                Text("Search Notes").font(.headline)
+                Text("Find by title, content, tags, or folders").font(.subheadline).foregroundStyle(Color.nSecondary)
             }
             .frame(maxHeight: .infinity)
         }
