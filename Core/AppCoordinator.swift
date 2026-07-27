@@ -14,6 +14,7 @@ final class AppCoordinator {
 
     enum Tab: String, CaseIterable {
         case home
+        case tasks
         case folders
         case search
         case settings
@@ -21,6 +22,7 @@ final class AppCoordinator {
         var title: String {
             switch self {
             case .home: return "Home"
+            case .tasks: return "Tasks"
             case .folders: return "Folders"
             case .search: return "Search"
             case .settings: return "Settings"
@@ -30,6 +32,7 @@ final class AppCoordinator {
         var icon: String {
             switch self {
             case .home: return "house"
+            case .tasks: return "checklist"
             case .folders: return "folder"
             case .search: return "magnifyingglass"
             case .settings: return "gearshape"

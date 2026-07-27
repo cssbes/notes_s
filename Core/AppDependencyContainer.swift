@@ -5,6 +5,7 @@ import SwiftData
 final class AppDependencyContainer {
     let context: ModelContext
     let noteService: NoteService
+    let taskService: TaskService
     let searchService: SearchService
     let exportService: ExportService
     let backupService: BackupService
@@ -16,6 +17,7 @@ final class AppDependencyContainer {
         self.context = context
 
         self.noteService = NoteService(context: context)
+        self.taskService = TaskService(context: context)
         self.searchService = SearchService(context: context)
         self.exportService = ExportService()
         self.backupService = BackupService(context: context)
@@ -35,6 +37,10 @@ final class AppDependencyContainer {
 
     func makeFolderViewModel() -> FolderViewModel {
         FolderViewModel(noteService: noteService)
+    }
+
+    func makeTaskViewModel() -> TaskViewModel {
+        TaskViewModel(taskService: taskService)
     }
 
     func makeSearchViewModel() -> SearchViewModel {

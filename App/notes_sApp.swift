@@ -35,6 +35,10 @@ struct MainTabView: View {
                 .tabItem { Label("Home", systemImage: "house") }
                 .tag(AppCoordinator.Tab.home)
 
+            TasksView(viewModel: coordinator.container.makeTaskViewModel())
+                .tabItem { Label("Tasks", systemImage: "checklist") }
+                .tag(AppCoordinator.Tab.tasks)
+
             NoteListView(viewModel: coordinator.container.makeNoteListViewModel())
                 .tabItem { Label("All Notes", systemImage: "note.text") }
                 .tag(AppCoordinator.Tab.folders)
