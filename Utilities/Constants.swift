@@ -2,7 +2,7 @@ import Foundation
 
 enum Constants {
     static let appName = "Notes"
-    static let appVersion = "1.0.0"
+    static let appVersion = "1.1"
     static let appBuild = 1
     static let miniOSVersion = 18.0
 
