@@ -21,6 +21,11 @@ final class NoteEditorViewModel {
     var showFolderPicker = false
     var showEmojiPicker = false
     var showColorPicker = false
+    var showTemplatePicker = false
+    var showDocumentScanner = false
+    var showAttachmentPicker = false
+    var showHijriDate = false
+    var attachments: [NoteAttachment] = []
 
     var wordCount: Int { note.wordCount }
     var characterCount: Int { note.characterCount }
@@ -55,7 +60,54 @@ final class NoteEditorViewModel {
             self.lastSavedContent = ""
         }
 
+        loadAttachments()
+
         undoStack = [content]
+    }
+
+    private func loadAttachments() {
+        let desc = FetchDescriptor<NoteAttachment>(predicate: #Predicate { $0.noteID == note.id })
+        attachments = (try? noteService.context.fetch(desc)) ?? []
+    }
+
+    func addAttachment(type: AttachmentType, data: Data, fileName: String) {
+        let att = NoteAttachment(type: type, fileName: fileName, data: data, noteID: note.id)
+        noteService.context.insert(att)
+        attachments.append(att)
+        if !note.title.isEmpty && note.content.isEmpty {
+            note.content = "<p>\(fileName)</p>"
+        }
+        try? noteService.context.save()
+    }
+
+    func deleteAttachment(_ attachment: NoteAttachment) {
+        noteService.context.delete(attachment)
+        attachments.removeAll { $0.id == attachment.id }
+        try? noteService.context.save()
+    }
+
+    func applyTemplate(_ template: NoteTemplate) {
+        title = template.title
+        content = template.content
+        pushUndo()
+    }
+
+    func insertHijriDate() {
+        let hijri = Date().hijriFull
+        let greg = Date().gregorianFull
+        content += "<p><b>\(greg)</b><br>\(hijri)</p>"
+        pushUndo()
+    }
+
+    func applySmartTags() {
+        let suggested = SmartTagService.suggestTags(for: content, title: title)
+        for tagName in suggested {
+            if !note.tags.contains(where: { $0.name == tagName }) {
+                if let tag = try? noteService.createTag(name: tagName) {
+                    note.tags.append(tag)
+                }
+            }
+        }
     }
 
     func save() {

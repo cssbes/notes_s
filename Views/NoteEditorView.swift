@@ -54,6 +54,29 @@ struct NoteEditorView: View {
 
                     RichTextEditor(htmlContent: $viewModel.content, formattingController: formattingController)
                         .frame(minHeight: 400)
+
+                    DrawingCanvasViewWrapper { data in
+                        viewModel.addAttachment(type: .drawing, data: data, fileName: "Drawing_\(Date().timeIntervalSince1970).data")
+                    }
+
+                    if !viewModel.attachments.isEmpty {
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Attachments").font(.system(size: 12, weight: .semibold)).foregroundStyle(Color.nSecondary).textCase(.uppercase)
+                            ForEach(viewModel.attachments) { att in
+                                HStack(spacing: 8) {
+                                    Image(systemName: att.type.icon).foregroundStyle(Color.nAccent)
+                                    Text(att.fileName).font(.system(size: 13)).foregroundStyle(Color.nText)
+                                    Spacer()
+                                    Button { viewModel.deleteAttachment(att) } label: { Image(systemName: "trash").font(.caption).foregroundStyle(.red) }
+                                }
+                                .padding(8)
+                                .background(Color.nSurface)
+                                .cornerRadius(8)
+                            }
+                        }
+                    }
+
+                    Text(Date().dualDate).font(.system(size: 11)).foregroundStyle(Color.nTertiary)
                 }
                 .padding(20)
             }
@@ -72,10 +95,14 @@ struct NoteEditorView: View {
                     Button { viewModel.togglePin() } label: {
                         Image(systemName: viewModel.note.isPinned ? "pin.fill" : "pin")
                     }
+                    Button { viewModel.showTemplatePicker = true } label: { Image(systemName: "rectangle.on.rectangle").foregroundStyle(Color.nAccent) }
+                    Button { viewModel.showDocumentScanner = true } label: { Image(systemName: "doc.viewfinder").foregroundStyle(Color.nAccent) }
                     Menu {
                         Section {
                             Button { viewModel.showEmojiPicker = true } label: { Label("Set Emoji", systemImage: "face.smiling") }
                             Button { viewModel.showColorPicker = true } label: { Label("Set Color", systemImage: "paintpalette") }
+                            Button { viewModel.insertHijriDate() } label: { Label("Hijri Date", systemImage: "calendar") }
+                            Button { viewModel.applySmartTags() } label: { Label("Smart Tags", systemImage: "tag") }
                         }
                         Section {
                             Button { viewModel.duplicateNote() } label: { Label("Duplicate", systemImage: "doc.on.doc") }
@@ -102,6 +129,14 @@ struct NoteEditorView: View {
         .sheet(isPresented: $viewModel.showFolderPicker) { folderPickerSheet }
         .sheet(isPresented: $viewModel.showEmojiPicker) { emojiPickerSheet }
         .sheet(isPresented: $viewModel.showColorPicker) { colorPickerSheet }
+        .sheet(isPresented: $viewModel.showTemplatePicker) { TemplatePickerView { viewModel.applyTemplate($0) } }
+        .sheet(isPresented: $viewModel.showDocumentScanner) { DocumentScanView { images in
+            for (i, img) in images.enumerated() {
+                if let data = img.jpegData(compressionQuality: 0.8) {
+                    viewModel.addAttachment(type: .scannedDocument, data: data, fileName: "Scan_\(i+1).jpg")
+                }
+            }
+        } }
         .onChange(of: viewModel.content) { _, _ in viewModel.autoSave() }
         .onDisappear { viewModel.save() }
     }

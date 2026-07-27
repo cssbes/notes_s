@@ -12,6 +12,11 @@ struct NotesApp: App {
                 .environment(coordinator)
                 .tint(Color(hex: accentColorHex) ?? .blue)
                 .preferredColorScheme(colorScheme)
+                .onAppear {
+                    if LockService.shared.isEnabled {
+                        Task { await LockService.shared.authenticate() }
+                    }
+                }
         }
     }
 

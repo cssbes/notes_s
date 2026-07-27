@@ -30,10 +30,12 @@ struct HomeView: View {
                         .font(.system(size: 28, weight: .bold))
                 }
                 ToolbarItem(placement: .topBarTrailing) {
-                    HStack(spacing: 16) {
-                        Button { coordinator.selectedTab = .search } label: {
-                            Image(systemName: "magnifyingglass").font(.system(size: 15, weight: .medium))
-                        }
+                    HStack(spacing: 12) {
+                        Menu {
+                            Button { coordinator.selectedTab = .tasks } label: { Label("Tasks", systemImage: "checklist") }
+                            Button { coordinator.selectedTab = .settings } label: { Label("Settings", systemImage: "gearshape") }
+                        } label: { Image(systemName: "ellipsis.circle").font(.system(size: 15, weight: .medium)) }
+
                         Button { coordinator.createNewNote() } label: {
                             Image(systemName: "square.and.pencil").font(.system(size: 15, weight: .medium))
                         }

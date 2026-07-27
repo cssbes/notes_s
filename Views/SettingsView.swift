@@ -8,6 +8,9 @@ struct SettingsView: View {
     @State private var showSuccessAlert = false
     @State private var errorText = ""
     @State private var successText = ""
+    @State private var lockEnabled = LockService.shared.isEnabled
+    @State private var showInsights = false
+    @Environment(AppCoordinator.self) private var coordinator
 
     init(viewModel: SettingsViewModel) {
         self._viewModel = State(initialValue: viewModel)
@@ -56,6 +59,30 @@ struct SettingsView: View {
                 } header: { Text("Editor").textCase(.uppercase).font(.system(size: 12, weight: .semibold)).foregroundStyle(Color.nSecondary) }
 
                 Section {
+                    Toggle(isOn: $lockEnabled) {
+                        HStack {
+                            Image(systemName: LockService.shared.biometryType == .faceID ? "faceid" : "touchid")
+                                .foregroundStyle(Color.nAccent)
+                            Text("Biometric Lock")
+                        }
+                    }
+                    .onChange(of: lockEnabled) { _, newValue in
+                        if newValue {
+                            Task { await LockService.shared.authenticate(reason: "Enable lock"); lockEnabled = LockService.shared.isEnabled }
+                        } else {
+                            LockService.shared.setEnabled(false)
+                        }
+                    }
+                    .disabled(!LockService.shared.isLockAvailable)
+                } header: { Text("Security").textCase(.uppercase).font(.system(size: 12, weight: .semibold)).foregroundStyle(Color.nSecondary) }
+
+                Section {
+                    Button { showInsights = true } label: {
+                        Label("Insights", systemImage: "chart.bar.fill").foregroundStyle(Color.nAccent)
+                    }
+                } header: { Text("Statistics").textCase(.uppercase).font(.system(size: 12, weight: .semibold)).foregroundStyle(Color.nSecondary) }
+
+                Section {
                     Button { viewModel.createBackup() } label: { Label("Create Backup", systemImage: "externaldrive.fill") }
                     Button { showFilePicker = true } label: { Label("Restore", systemImage: "externaldrive.badge.arrow.down") }
                     HStack { Text("Last Backup"); Spacer(); Text(viewModel.formattedLastBackup).foregroundStyle(Color.nSecondary) }
@@ -81,6 +108,9 @@ struct SettingsView: View {
             }
             .onChange(of: viewModel.errorMessage) { _, newValue in if let msg = newValue { errorText = msg; showErrorAlert = true; viewModel.errorMessage = nil } }
             .onChange(of: viewModel.successMessage) { _, newValue in if let msg = newValue { successText = msg; showSuccessAlert = true; viewModel.successMessage = nil } }
+            .sheet(isPresented: $showInsights) {
+                InsightsView(insights: InsightsService(noteService: coordinator.container.noteService))
+            }
         }
     }
 

@@ -63,6 +63,18 @@
 		10000055 /* TaskViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000056; };
 		10000056 /* TasksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000057; };
 		10000057 /* TaskEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000058; };
+		10000058 /* LockService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000059; };
+		10000059 /* Date+Hijri.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0000005A; };
+		1000005A /* NoteTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0000005B; };
+		1000005B /* InsightsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0000005C; };
+		1000005C /* SmartTagService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0000005D; };
+		1000005D /* DrawingCanvasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0000005E; };
+		1000005E /* DocumentScanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0000005F; };
+		1000005F /* NoteAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000060; };
+		10000060 /* QuickNoteService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000061; };
+		10000061 /* View+Biometric.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000062; };
+		10000062 /* InsightsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000063; };
+		10000063 /* TemplatePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000064; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -124,6 +136,18 @@
 		00000056 /* TaskViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskViewModel.swift; sourceTree = "<group>"; };
 		00000057 /* TasksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasksView.swift; sourceTree = "<group>"; };
 		00000058 /* TaskEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskEditorView.swift; sourceTree = "<group>"; };
+		00000059 /* LockService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockService.swift; sourceTree = "<group>"; };
+		0000005A /* Date+Hijri.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Hijri.swift"; sourceTree = "<group>"; };
+		0000005B /* NoteTemplate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteTemplate.swift; sourceTree = "<group>"; };
+		0000005C /* InsightsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightsService.swift; sourceTree = "<group>"; };
+		0000005D /* SmartTagService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmartTagService.swift; sourceTree = "<group>"; };
+		0000005E /* DrawingCanvasView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingCanvasView.swift; sourceTree = "<group>"; };
+		0000005F /* DocumentScanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentScanView.swift; sourceTree = "<group>"; };
+		00000060 /* NoteAttachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteAttachment.swift; sourceTree = "<group>"; };
+		00000061 /* QuickNoteService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickNoteService.swift; sourceTree = "<group>"; };
+		00000062 /* View+Biometric.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Biometric.swift"; sourceTree = "<group>"; };
+		00000063 /* InsightsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightsView.swift; sourceTree = "<group>"; };
+		00000064 /* TemplatePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplatePickerView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -185,6 +209,8 @@
 				00000008 /* SortOption.swift */,
 				00000009 /* AppSettings.swift */,
 				00000053 /* TaskItem.swift */,
+				0000005B /* NoteTemplate.swift */,
+				00000060 /* NoteAttachment.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -218,6 +244,8 @@
 				00000025 /* ArchiveView.swift */,
 				00000057 /* TasksView.swift */,
 				00000058 /* TaskEditorView.swift */,
+				00000063 /* InsightsView.swift */,
+				00000064 /* TemplatePickerView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -234,6 +262,8 @@
 				00000032 /* FormattingToolbar.swift */,
 				00000033 /* StatisticsView.swift */,
 				00000051 /* RichTextEditor.swift */,
+				0000005E /* DrawingCanvasView.swift */,
+				0000005F /* DocumentScanView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -247,6 +277,10 @@
 				00000037 /* SearchService.swift */,
 				00000054 /* TaskService.swift */,
 				00000055 /* NotificationService.swift */,
+				00000059 /* LockService.swift */,
+				0000005C /* InsightsService.swift */,
+				0000005D /* SmartTagService.swift */,
+				00000061 /* QuickNoteService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -266,6 +300,8 @@
 				00000040 /* View+Extensions.swift */,
 				00000041 /* Date+Extensions.swift */,
 				00000042 /* String+Extensions.swift */,
+				0000005A /* Date+Hijri.swift */,
+				00000062 /* View+Biometric.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -409,6 +445,18 @@
 				10000055 /* TaskViewModel.swift in Sources */,
 				10000056 /* TasksView.swift in Sources */,
 				10000057 /* TaskEditorView.swift in Sources */,
+				10000058 /* LockService.swift in Sources */,
+				10000059 /* Date+Hijri.swift in Sources */,
+				1000005A /* NoteTemplate.swift in Sources */,
+				1000005B /* InsightsService.swift in Sources */,
+				1000005C /* SmartTagService.swift in Sources */,
+				1000005D /* DrawingCanvasView.swift in Sources */,
+				1000005E /* DocumentScanView.swift in Sources */,
+				1000005F /* NoteAttachment.swift in Sources */,
+				10000060 /* QuickNoteService.swift in Sources */,
+				10000061 /* View+Biometric.swift in Sources */,
+				10000062 /* InsightsView.swift in Sources */,
+				10000063 /* TemplatePickerView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
