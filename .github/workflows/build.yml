@@ -51,6 +51,22 @@ jobs:
           echo "IPA created at: $RUNNER_TEMP/ipa/notes_s.ipa"
           ls -la "$RUNNER_TEMP/ipa/notes_s.ipa"
 
+      - name: Show IPA and archive info
+        run: |
+          echo "=== Archive Info ==="
+          ls -la "$RUNNER_TEMP/notes_s.xcarchive/Products/Applications/" 2>/dev/null
+          APP=$(ls "$RUNNER_TEMP/notes_s.xcarchive/Products/Applications/" 2>/dev/null | head -1)
+          if [ -n "$APP" ]; then
+            echo "=== .app bundle contents ==="
+            du -sh "$RUNNER_TEMP/notes_s.xcarchive/Products/Applications/$APP"
+            find "$RUNNER_TEMP/notes_s.xcarchive/Products/Applications/$APP" -maxdepth 3 -type f -exec ls -lh {} \; 2>/dev/null | head -20
+            echo "=== Binary check ==="
+            file "$RUNNER_TEMP/notes_s.xcarchive/Products/Applications/$APP/notes_s" 2>/dev/null || echo "No binary at expected path"
+          fi
+          echo "=== IPA Info ==="
+          ls -lh "$RUNNER_TEMP/ipa/notes_s.ipa"
+          unzip -l "$RUNNER_TEMP/ipa/notes_s.ipa" 2>/dev/null | head -30
+
       - name: Upload IPA as artifact
         uses: actions/upload-artifact@v4
         with:
@@ -62,5 +78,3 @@ jobs:
         run: |
           echo "=== BUILD ERRORS ==="
           grep -n "error:" "$RUNNER_TEMP/build.log" 2>/dev/null | head -30
-          echo "=== ARCHIVE CONTENTS ==="
-          find "$RUNNER_TEMP/notes_s.xcarchive" -maxdepth 4 -type d 2>/dev/null || echo "No archive"
