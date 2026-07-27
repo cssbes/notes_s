@@ -4,7 +4,7 @@ extension View {
     func cardStyle() -> some View {
         self
             .padding(16)
-            .background(Color.themeSurface)
+            .background(Color.nSurface)
             .cornerRadius(16)
             .shadow(color: .black.opacity(0.03), radius: 8, y: 2)
     }
