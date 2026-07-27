@@ -66,7 +66,8 @@ final class NoteEditorViewModel {
     }
 
     private func loadAttachments() {
-        let desc = FetchDescriptor<NoteAttachment>(predicate: #Predicate { $0.noteID == note.id })
+        let nid = note.id
+        let desc = FetchDescriptor<NoteAttachment>(predicate: #Predicate { $0.noteID == nid })
         attachments = (try? noteService.context.fetch(desc)) ?? []
     }
 

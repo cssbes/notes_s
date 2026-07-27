@@ -38,7 +38,10 @@ struct SettingsView: View {
 
                 Section {
                     Picker("Language", selection: $viewModel.language) {
-                        ForEach(AppLanguage.allCases) { Text($0.displayName).tag($0) }
+                        let cases = AppLanguage.allCases
+                        ForEach(cases) { lang in
+                            Text(lang.displayName).tag(lang)
+                        }
                     }
                     .onChange(of: viewModel.language) { _, _ in viewModel.saveLanguage(); updateLocale() }
                 } header: { Text("Language").textCase(.uppercase).font(.system(size: 12, weight: .semibold)).foregroundStyle(Color.nSecondary) }

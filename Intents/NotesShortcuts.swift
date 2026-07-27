@@ -93,8 +93,8 @@ struct GetTasksIntent: AppIntent {
 // MARK: - Intent Entities
 
 struct IntentNote: Identifiable, AppEntity {
-    static var typeDisplayRepresentation: TypeDisplayRepresentation = "Note"
-    static var defaultQuery = NoteQuery()
+    static let typeDisplayRepresentation: TypeDisplayRepresentation = "Note"
+    static let defaultQuery = NoteQuery()
 
     var id: UUID
     var title: String
@@ -130,8 +130,8 @@ struct NoteQuery: EntityQuery {
 }
 
 struct IntentTask: Identifiable, AppEntity {
-    static var typeDisplayRepresentation: TypeDisplayRepresentation = "Task"
-    static var defaultQuery = TaskQuery()
+    static let typeDisplayRepresentation: TypeDisplayRepresentation = "Task"
+    static let defaultQuery = TaskQuery()
 
     var id: UUID
     var title: String

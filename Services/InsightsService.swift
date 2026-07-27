@@ -50,7 +50,7 @@ final class InsightsService {
 
         var streak = 0
         let cal = Calendar.current
-        var currentDate = cal.startOfDay(for: Date())
+        let currentDate = cal.startOfDay(for: Date())
 
         for offset in 0..<365 {
             let checkDate = cal.date(byAdding: .day, value: -offset, to: currentDate)!

@@ -44,9 +44,7 @@ struct DrawingCanvasViewWrapper: View {
             VStack(spacing: 0) {
                 HStack {
                     Button("Done") {
-                        if let data = drawing.dataRepresentation() {
-                            onSave?(data)
-                        }
+                        onSave?(drawing.dataRepresentation())
                         showDrawing = false
                     }
                     .fontWeight(.semibold).foregroundStyle(Color.nAccent)
