@@ -75,49 +75,51 @@ struct HomeView: View {
         }
     }
 
+    @ViewBuilder
     private var quickSearchBar: some View {
-        HStack(spacing: 10) {
-            Image(systemName: "magnifyingglass")
-                .foregroundStyle(Color.themeSubtle)
-                .font(.system(size: 14))
-            TextField("Search", text: $viewModel.searchQuery)
-                .textFieldStyle(.plain)
-                .font(.system(size: 15, design: .rounded))
-                .onChange(of: viewModel.searchQuery) { _, _ in viewModel.search() }
-            if !viewModel.searchQuery.isEmpty {
-                Button { viewModel.searchQuery = ""; viewModel.searchResults = [] } label: {
-                    Image(systemName: "xmark.circle.fill").foregroundStyle(Color.themeSubtle)
-                }
-            }
-        }
-        .padding(14)
-        .background(Color.themeCard)
-        .cornerRadius(12)
-        .padding(.horizontal, 20)
-
-        if !viewModel.searchResults.isEmpty {
-            VStack(alignment: .leading, spacing: 0) {
-                ForEach(viewModel.searchResults.prefix(5)) { note in
-                    Button {
-                        coordinator.openNote(note)
-                    } label: {
-                        HStack(spacing: 12) {
-                            Text(note.displayEmoji).font(.title3)
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text(note.displayTitle).font(.subheadline).fontWeight(.medium)
-                                Text(note.previewText).font(.caption).foregroundStyle(Color.themeSubtle).lineLimit(1)
-                            }
-                            Spacer()
-                        }
-                        .padding(.horizontal, 20).padding(.vertical, 10)
+        VStack(spacing: 4) {
+            HStack(spacing: 10) {
+                Image(systemName: "magnifyingglass")
+                    .foregroundStyle(Color.themeSubtle)
+                    .font(.system(size: 14))
+                TextField("Search", text: $viewModel.searchQuery)
+                    .textFieldStyle(.plain)
+                    .font(.system(size: 15, design: .rounded))
+                    .onChange(of: viewModel.searchQuery) { _, _ in viewModel.search() }
+                if !viewModel.searchQuery.isEmpty {
+                    Button { viewModel.searchQuery = ""; viewModel.searchResults = [] } label: {
+                        Image(systemName: "xmark.circle.fill").foregroundStyle(Color.themeSubtle)
                     }
-                    .buttonStyle(.plain)
                 }
             }
-            .background(Color.themeSurface)
+            .padding(14)
+            .background(Color.themeCard)
             .cornerRadius(12)
-            .padding(.horizontal, 20)
+
+            if !viewModel.searchResults.isEmpty {
+                VStack(alignment: .leading, spacing: 0) {
+                    ForEach(viewModel.searchResults.prefix(5)) { note in
+                        Button {
+                            coordinator.openNote(note)
+                        } label: {
+                            HStack(spacing: 12) {
+                                Text(note.displayEmoji).font(.title3)
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text(note.displayTitle).font(.subheadline).fontWeight(.medium)
+                                    Text(note.previewText).font(.caption).foregroundStyle(Color.themeSubtle).lineLimit(1)
+                                }
+                                Spacer()
+                            }
+                            .padding(.horizontal, 14).padding(.vertical, 10)
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
+                .background(Color.themeSurface)
+                .cornerRadius(12)
+            }
         }
+        .padding(.horizontal, 20)
     }
 
     @ViewBuilder
