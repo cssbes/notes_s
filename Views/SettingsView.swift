@@ -30,11 +30,7 @@ struct SettingsView: View {
 
                 Section {
                     Toggle(isOn: $lockEnabled) {
-                        HStack {
-                            Image(systemName: LockService.shared.biometryType == .faceID ? "faceid" : "touchid")
-                                .foregroundStyle(Color.nAccent)
-                            Text("Biometric Lock")
-                        }
+                        lockToggleLabel
                     }
                     .onChange(of: lockEnabled) { _, newValue in
                         if newValue {
@@ -160,6 +156,14 @@ struct SettingsView: View {
             aboutRow("iOS", "18+")
         } header: {
             Text("About").textCase(.uppercase).font(.system(size: 12, weight: .semibold)).foregroundStyle(Color.nSecondary)
+        }
+    }
+
+    private var lockToggleLabel: some View {
+        let icon = LockService.shared.biometryType == .faceID ? "faceid" : "touchid"
+        return HStack {
+            Image(systemName: icon).foregroundStyle(Color.nAccent)
+            Text("Biometric Lock")
         }
     }
 
