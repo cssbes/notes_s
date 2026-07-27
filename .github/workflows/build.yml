@@ -36,19 +36,27 @@ jobs:
             PROVISIONING_PROFILE_SPECIFIER="" | tee "$RUNNER_TEMP/build.log"
 
       - name: Export unsigned IPA
-        if: success()
         run: |
+          set -o pipefail
           xcodebuild -exportArchive \
             -archivePath "$RUNNER_TEMP/notes_s.xcarchive" \
             -exportPath "$RUNNER_TEMP/ipa" \
             -exportOptionsPlist ExportOptions.plist | tee "$RUNNER_TEMP/export.log"
 
+      - name: List export directory
+        if: always()
+        run: |
+          echo "RUNNER_TEMP=$RUNNER_TEMP"
+          echo "Contents of ipa dir:"
+          ls -la "$RUNNER_TEMP/ipa/" 2>&1 || echo "No ipa dir"
+          echo "Looking for any .ipa:"
+          find "$RUNNER_TEMP" -name "*.ipa" 2>/dev/null
+
       - name: Upload IPA as artifact
-        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: notes_s-unsigned
-          path: ${{ runner.temp }}/ipa/*.ipa
+          path: ${{ runner.temp }}/ipa/
 
       - name: Show errors on failure
         if: failure()
