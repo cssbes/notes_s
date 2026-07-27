@@ -87,7 +87,7 @@ final class SettingsViewModel {
         do {
             let descriptor = FetchDescriptor<AppSettings>()
             let settings = try noteService.context.fetch(descriptor)
-            let appSettings = settings.first ?? AppSettings()
+            var appSettings = settings.first ?? AppSettings()
             update(&appSettings)
             try noteService.context.save()
         } catch {
