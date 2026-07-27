@@ -33,25 +33,29 @@ struct MainTabView: View {
         TabView(selection: $coordinator.selectedTab) {
             HomeView(viewModel: coordinator.container.makeHomeViewModel())
                 .tabItem {
-                    Label("Home", systemImage: "house")
+                    Image(systemName: "house.fill")
+                    Text("Home")
                 }
                 .tag(AppCoordinator.Tab.home)
 
             NoteListView(viewModel: coordinator.container.makeNoteListViewModel())
                 .tabItem {
-                    Label("All Notes", systemImage: "note.text")
+                    Image(systemName: "note.text")
+                    Text("All Notes")
                 }
                 .tag(AppCoordinator.Tab.folders)
 
             SearchView(viewModel: coordinator.container.makeSearchViewModel())
                 .tabItem {
-                    Label("Search", systemImage: "magnifyingglass")
+                    Image(systemName: "magnifyingglass")
+                    Text("Search")
                 }
                 .tag(AppCoordinator.Tab.search)
 
             SettingsView(viewModel: coordinator.container.makeSettingsViewModel())
                 .tabItem {
-                    Label("Settings", systemImage: "gearshape")
+                    Image(systemName: "gearshape.fill")
+                    Text("Settings")
                 }
                 .tag(AppCoordinator.Tab.settings)
         }

@@ -10,10 +10,13 @@ struct RichTextEditor: UIViewRepresentable {
         let tv = UITextView()
         tv.isEditable = isEditable
         tv.delegate = context.coordinator
-        tv.font = UIFont.systemFont(ofSize: 16)
+        tv.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         tv.backgroundColor = .clear
         tv.attributedText = Self.parseHTML(htmlContent) ?? NSAttributedString(string: htmlContent)
         formattingController.textView = tv
+        tv.textContainerInset = UIEdgeInsets(top: 12, left: 8, bottom: 12, right: 8)
+        tv.textContainer.lineFragmentPadding = 0
+        tv.tintColor = .systemBlue
         return tv
     }
 

@@ -18,19 +18,45 @@ extension Color {
         )
     }
 
-    static var accent: Color {
-        .blue
-    }
+    static var accent: Color { .blue }
 
-    static var cardBackground: Color {
+    static var cardBackground: Color { Color(.systemBackground) }
+
+    static var groupedBackground: Color { Color(.systemGroupedBackground) }
+
+    static var secondaryFill: Color { Color(.secondarySystemFill) }
+
+    static var editorBackground: Color {
         Color(.systemBackground)
     }
 
-    static var groupedBackground: Color {
+    static var editorText: Color {
+        Color(.label)
+    }
+
+    static var noteAccent: Color { Color(hex: "#007AFF") ?? .blue }
+    static var noteGreen: Color { Color(hex: "#34C759") ?? .green }
+    static var noteOrange: Color { Color(hex: "#FF9500") ?? .orange }
+    static var noteRed: Color { Color(hex: "#FF3B30") ?? .red }
+    static var notePurple: Color { Color(hex: "#AF52DE") ?? .purple }
+
+    static var gradientStart: Color { Color(hex: "#667eea") ?? .blue }
+    static var gradientEnd: Color { Color(hex: "#764ba2") ?? .purple }
+
+    static var surfaceLight: Color { Color(.systemGray6) }
+    static var surfaceDark: Color { Color(.systemGray5) }
+
+    static var premiumBackground: Color {
         Color(.systemGroupedBackground)
     }
 
-    static var secondaryFill: Color {
-        Color(.secondarySystemFill)
+    static func dynamicColor(light: Color, dark: Color) -> Color {
+        Color(light: light, dark: dark)
+    }
+
+    init(light: Color, dark: Color) {
+        self.init { trait in
+            trait.userInterfaceStyle == .dark ? dark : light
+        }
     }
 }

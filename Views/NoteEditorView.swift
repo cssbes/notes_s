@@ -6,6 +6,8 @@ struct NoteEditorView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(AppCoordinator.self) private var coordinator
     @FocusState private var isTitleFocused: Bool
+    @FocusState private var isEditorFocused: Bool
+    @State private var showToolbar = true
 
     init(viewModel: NoteEditorViewModel) {
         self._viewModel = State(initialValue: viewModel)
@@ -14,34 +16,43 @@ struct NoteEditorView: View {
     var body: some View {
         VStack(spacing: 0) {
             noteHeader
-            FormattingToolbar(
-                onBold: { formattingController.toggleBold() },
-                onItalic: { formattingController.toggleItalic() },
-                onUnderline: { formattingController.toggleUnderline() },
-                onStrikethrough: { formattingController.toggleStrikethrough() },
-                onHighlight: { formattingController.toggleHighlight() },
-                onHeading: { formattingController.applyHeading($0) },
-                onBulletList: { formattingController.toggleBulletList() },
-                onNumberedList: { formattingController.toggleNumberedList() },
-                onChecklist: { formattingController.toggleChecklist() },
-                onQuote: { formattingController.applyQuote() },
-                onCode: { formattingController.applyCode() },
-                onLink: { formattingController.addLink() },
-                onDivider: { formattingController.insertDivider() },
-                onImage: { formattingController.insertImagePlaceholder() },
-                onUndo: { viewModel.undo() },
-                onRedo: { viewModel.redo() },
-                canUndo: viewModel.canUndo,
-                canRedo: viewModel.canRedo
-            )
-            .padding(.top, 4)
+                .padding(.horizontal, 20)
+                .padding(.top, 12)
+
+            if showToolbar {
+                FormattingToolbar(
+                    onBold: { formattingController.toggleBold() },
+                    onItalic: { formattingController.toggleItalic() },
+                    onUnderline: { formattingController.toggleUnderline() },
+                    onStrikethrough: { formattingController.toggleStrikethrough() },
+                    onHighlight: { formattingController.toggleHighlight() },
+                    onHeading: { formattingController.applyHeading($0) },
+                    onBulletList: { formattingController.toggleBulletList() },
+                    onNumberedList: { formattingController.toggleNumberedList() },
+                    onChecklist: { formattingController.toggleChecklist() },
+                    onQuote: { formattingController.applyQuote() },
+                    onCode: { formattingController.applyCode() },
+                    onLink: { formattingController.addLink() },
+                    onDivider: { formattingController.insertDivider() },
+                    onImage: { formattingController.insertImagePlaceholder() },
+                    onUndo: { viewModel.undo() },
+                    onRedo: { viewModel.redo() },
+                    canUndo: viewModel.canUndo,
+                    canRedo: viewModel.canRedo
+                )
+                .transition(.move(edge: .top).combined(with: .opacity))
+                .padding(.top, 4)
+            }
 
             RichTextEditor(
                 htmlContent: $viewModel.content,
                 formattingController: formattingController
             )
-            .padding(.horizontal)
+            .focused($isEditorFocused)
+            .padding(.horizontal, 16)
+            .padding(.top, 8)
         }
+        .background(Color.editorBackground)
         .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -56,18 +67,29 @@ struct NoteEditorView: View {
                 statisticsLabel
             }
             ToolbarItem(placement: .topBarTrailing) {
-                HStack(spacing: 8) {
+                HStack(spacing: 6) {
+                    Button {
+                        withAnimation(.easeInOut(duration: 0.2)) {
+                            showToolbar.toggle()
+                        }
+                    } label: {
+                        Image(systemName: showToolbar ? "keyboard.chevron.compact.down" : "keyboard.chevron.compact.up")
+                            .font(.system(size: 14))
+                    }
+
                     Button {
                         viewModel.toggleFavorite()
                     } label: {
                         Image(systemName: viewModel.note.isFavorite ? "star.fill" : "star")
                             .foregroundStyle(viewModel.note.isFavorite ? .yellow : .primary)
+                            .font(.system(size: 14))
                     }
 
                     Button {
                         viewModel.togglePin()
                     } label: {
                         Image(systemName: viewModel.note.isPinned ? "pin.fill" : "pin")
+                            .font(.system(size: 14))
                     }
 
                     Menu {
@@ -111,6 +133,7 @@ struct NoteEditorView: View {
                         }
                     } label: {
                         Image(systemName: "ellipsis.circle")
+                            .font(.system(size: 14))
                     }
                 }
             }
@@ -142,27 +165,24 @@ struct NoteEditorView: View {
     }
 
     private var noteHeader: some View {
-        HStack(spacing: 10) {
+        HStack(spacing: 12) {
             if !viewModel.note.emoji.isEmpty {
                 Text(viewModel.note.emoji)
-                    .font(.system(size: 32))
+                    .font(.system(size: 36))
             }
-            VStack(alignment: .leading, spacing: 2) {
+            VStack(alignment: .leading, spacing: 4) {
                 TextField("Title", text: $viewModel.title)
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
+                    .font(.system(size: 32, weight: .bold, design: .rounded))
                     .textFieldStyle(.plain)
                     .focused($isTitleFocused)
 
                 if !viewModel.isNew {
                     Text("Created \(viewModel.note.createdAt, style: .date)")
-                        .font(.caption2)
+                        .font(.caption)
                         .foregroundStyle(.tertiary)
                 }
             }
         }
-        .padding(.horizontal)
-        .padding(.top, 8)
     }
 
     private var statisticsLabel: some View {
@@ -172,9 +192,10 @@ struct NoteEditorView: View {
                     .font(.caption2)
                     .foregroundStyle(.secondary)
             }
-            Text("\(viewModel.wordCount) words · \(viewModel.readingTime) min")
+            Text("\(viewModel.wordCount) words  ·  \(viewModel.readingTime) min")
                 .font(.caption2)
                 .foregroundStyle(.tertiary)
+                .monospacedDigit()
         }
     }
 
