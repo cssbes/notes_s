@@ -67,7 +67,6 @@ struct TaskEditorView: View {
                 }
             }
         }
-        .formStyle(.insetGrouped)
         .background(Color.nBackground)
         .navigationTitle(existingTask != nil ? "Edit Task" : "New Task")
         .navigationBarTitleDisplayMode(.inline)

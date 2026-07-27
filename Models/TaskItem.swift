@@ -73,6 +73,6 @@ extension Calendar {
     func numberOfDaysBetween(_ from: Date, and to: Date) -> Int {
         let start = startOfDay(for: from)
         let end = startOfDay(for: to)
-        return difference(.day, between: start, and: end)
+        return dateComponents([.day], from: start, to: end).day ?? 0
     }
 }

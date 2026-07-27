@@ -120,7 +120,7 @@ struct TasksView: View {
                         .font(.system(size: 15, weight: .semibold))
                         .foregroundStyle(task.isCompleted ? Color.nSecondary : Color.nText)
                         .strikethrough(task.isCompleted)
-                    if let dueDate = task.dueDate {
+                    if task.dueDate != nil {
                         HStack(spacing: 4) {
                             Image(systemName: "calendar").font(.system(size: 10))
                             Text(task.formattedDueDate).font(.system(size: 11))
