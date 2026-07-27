@@ -19,42 +19,14 @@ struct SettingsView: View {
     var body: some View {
         NavigationStack {
             List {
-                Section {
-                    Picker("Theme", selection: $viewModel.theme) {
-                        ForEach(AppTheme.allCases) { Text($0.displayName).tag($0) }
-                    }
-                    .onChange(of: viewModel.theme) { _, _ in viewModel.saveTheme() }
-
-                    Picker("Accent", selection: $viewModel.accentColorHex) {
-                        ForEach(accentColors, id: \.hex) { color in
-                            HStack {
-                                Circle().fill(Color(hex: color.hex) ?? .blue).frame(width: 16, height: 16)
-                                Text(color.name)
-                            }.tag(color.hex)
-                        }
-                    }
-                    .onChange(of: viewModel.accentColorHex) { _, _ in viewModel.saveAccentColor() }
-                } header: { Text("Appearance").textCase(.uppercase).font(.system(size: 12, weight: .semibold)).foregroundStyle(Color.nSecondary) }
+                appearanceSection
 
                 Section {
                     languagePicker
                     .onChange(of: viewModel.language) { _, _ in viewModel.saveLanguage(); updateLocale() }
                 } header: { Text("Language").textCase(.uppercase).font(.system(size: 12, weight: .semibold)).foregroundStyle(Color.nSecondary) }
 
-                Section {
-                    VStack(spacing: 8) {
-                        HStack { Text("Font Size"); Spacer(); Text("\(Int(viewModel.fontSize))pt").foregroundStyle(Color.nSecondary).monospacedDigit() }
-                        Slider(value: $viewModel.fontSize, in: 12...24, step: 1)
-                            .onChange(of: viewModel.fontSize) { _, _ in viewModel.saveFontSize() }
-                            .tint(Color.nAccent)
-                        HStack { Text("A").font(.system(size: 12)).foregroundStyle(Color.nSecondary); Spacer(); Text("A").font(.system(size: 20)).foregroundStyle(Color.nSecondary) }
-                    }
-
-                    Picker("Font", selection: $viewModel.fontFamily) {
-                        ForEach(AppFontFamily.allCases) { Text($0.displayName).tag($0) }
-                    }
-                    .onChange(of: viewModel.fontFamily) { _, _ in viewModel.saveFontFamily() }
-                } header: { Text("Editor").textCase(.uppercase).font(.system(size: 12, weight: .semibold)).foregroundStyle(Color.nSecondary) }
+                editorSection
 
                 Section {
                     Toggle(isOn: $lockEnabled) {
@@ -86,11 +58,7 @@ struct SettingsView: View {
                     HStack { Text("Last Backup"); Spacer(); Text(viewModel.formattedLastBackup).foregroundStyle(Color.nSecondary) }
                 } header: { Text("Backup").textCase(.uppercase).font(.system(size: 12, weight: .semibold)).foregroundStyle(Color.nSecondary) }
 
-                Section {
-                    HStack { Text("Version"); Spacer(); Text(Constants.appVersion).foregroundStyle(Color.nSecondary) }
-                    HStack { Text("Build"); Spacer(); Text("2").foregroundStyle(Color.nSecondary) }
-                    HStack { Text("iOS"); Spacer(); Text("18+").foregroundStyle(Color.nSecondary) }
-                } header: { Text("About").textCase(.uppercase).font(.system(size: 12, weight: .semibold)).foregroundStyle(Color.nSecondary) }
+                aboutSection
             }
             .listStyle(.insetGrouped)
             .background(Color.nBackground)
@@ -109,6 +77,97 @@ struct SettingsView: View {
             .sheet(isPresented: $showInsights) {
                 InsightsView(insights: InsightsService(noteService: coordinator.container.noteService))
             }
+        }
+    }
+
+    @ViewBuilder private var appearanceSection: some View {
+        Section {
+            themePicker
+            accentPicker
+        } header: {
+            Text("Appearance").textCase(.uppercase).font(.system(size: 12, weight: .semibold)).foregroundStyle(Color.nSecondary)
+        }
+    }
+
+    private var themePicker: some View {
+        let themes = AppTheme.allCases
+        return Picker("Theme", selection: $viewModel.theme) {
+            ForEach(themes) { theme in
+                Text(theme.displayName).tag(theme)
+            }
+        }
+        .onChange(of: viewModel.theme) { _, _ in viewModel.saveTheme() }
+    }
+
+    private var accentPicker: some View {
+        Picker("Accent", selection: $viewModel.accentColorHex) {
+            ForEach(accentColors, id: \.hex) { color in
+                HStack {
+                    Circle().fill(Color(hex: color.hex) ?? .blue).frame(width: 16, height: 16)
+                    Text(color.name)
+                }.tag(color.hex)
+            }
+        }
+        .onChange(of: viewModel.accentColorHex) { _, _ in viewModel.saveAccentColor() }
+    }
+
+    @ViewBuilder private var editorSection: some View {
+        Section {
+            VStack(spacing: 8) {
+                fontSizeRow
+                Slider(value: $viewModel.fontSize, in: 12...24, step: 1)
+                    .onChange(of: viewModel.fontSize) { _, _ in viewModel.saveFontSize() }
+                    .tint(Color.nAccent)
+                fontSizeRange
+            }
+            fontPicker
+        } header: {
+            Text("Editor").textCase(.uppercase).font(.system(size: 12, weight: .semibold)).foregroundStyle(Color.nSecondary)
+        }
+    }
+
+    private var fontSizeRow: some View {
+        HStack {
+            Text("Font Size")
+            Spacer()
+            Text("\(Int(viewModel.fontSize))pt")
+                .foregroundStyle(Color.nSecondary).monospacedDigit()
+        }
+    }
+
+    private var fontSizeRange: some View {
+        HStack {
+            Text("A").font(.system(size: 12)).foregroundStyle(Color.nSecondary)
+            Spacer()
+            Text("A").font(.system(size: 20)).foregroundStyle(Color.nSecondary)
+        }
+    }
+
+    private var fontPicker: some View {
+        let families = AppFontFamily.allCases
+        return Picker("Font", selection: $viewModel.fontFamily) {
+            ForEach(families) { family in
+                Text(family.displayName).tag(family)
+            }
+        }
+        .onChange(of: viewModel.fontFamily) { _, _ in viewModel.saveFontFamily() }
+    }
+
+    private var aboutSection: some View {
+        Section {
+            aboutRow("Version", Constants.appVersion)
+            aboutRow("Build", "2")
+            aboutRow("iOS", "18+")
+        } header: {
+            Text("About").textCase(.uppercase).font(.system(size: 12, weight: .semibold)).foregroundStyle(Color.nSecondary)
+        }
+    }
+
+    private func aboutRow(_ label: String, _ value: String) -> some View {
+        HStack {
+            Text(label)
+            Spacer()
+            Text(value).foregroundStyle(Color.nSecondary)
         }
     }
 
