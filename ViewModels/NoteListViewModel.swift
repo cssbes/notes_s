@@ -108,4 +108,17 @@ final class NoteListViewModel {
             errorMessage = error.localizedDescription
         }
     }
+
+    func duplicateNote(_ note: Note) {
+        let copy = note.duplicate()
+        noteService.context.insert(copy)
+        try? noteService.context.save()
+        loadNotes()
+    }
+
+    func moveNote(_ note: Note, to folder: Folder?) {
+        note.folder = folder
+        try? noteService.context.save()
+        loadNotes()
+    }
 }

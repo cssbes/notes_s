@@ -138,22 +138,16 @@ struct NoteListView: View {
     }
 
     private func duplicateNote(_ note: Note) {
-        let copy = note.duplicate()
-        let context = viewModel.noteService.context
-        context.insert(copy)
-        try? context.save()
-        viewModel.loadNotes()
+        viewModel.duplicateNote(note)
     }
 
     private func folderPickerSheet(for note: Note) -> some View {
         NavigationStack {
             FolderPickerView(
-                noteService: viewModel.noteService,
+                noteService: coordinator.container.noteService,
                 selectedFolder: note.folder
             ) { folder in
-                note.folder = folder
-                try? viewModel.noteService.context.save()
-                viewModel.loadNotes()
+                viewModel.moveNote(note, to: folder)
                 showFolderPicker = false
             }
         }

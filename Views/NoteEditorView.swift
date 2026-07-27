@@ -155,7 +155,7 @@ struct NoteEditorView: View {
                     .focused($isTitleFocused)
 
                 if !viewModel.isNew {
-                    Text("Created \(viewModel.note.createdAt.formatted(date: .abbreviated, time: .short))")
+                    Text("Created \(viewModel.note.createdAt, format: Date.FormatStyle(date: .abbreviated, time: .standard))")
                         .font(.caption2)
                         .foregroundStyle(.tertiary)
                 }

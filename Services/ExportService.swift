@@ -21,7 +21,7 @@ enum ExportError: LocalizedError {
         var md = "# \(note.title)\n\n"
         md += parseContentToMarkdown(note.content)
         md += "\n---\n"
-        md += "Exported from Notes on \(Date().formatted(date: .long, time: .short))\n"
+        md += "Exported from Notes on \(Date().formatted(Date.FormatStyle(date: .long, time: .standard)))\n"
         guard let data = md.data(using: .utf8) else {
             throw ExportError.encodingFailed
         }

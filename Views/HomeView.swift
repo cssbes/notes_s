@@ -91,58 +91,60 @@ struct HomeView: View {
 
     // MARK: - Quick Search
 
+    @ViewBuilder
     private var quickSearchBar: some View {
-        HStack(spacing: 10) {
-            Image(systemName: "magnifyingglass")
-                .foregroundStyle(.secondary)
-            TextField("Search notes...", text: $viewModel.searchQuery)
-                .textFieldStyle(.plain)
-                .onChange(of: viewModel.searchQuery) { _, _ in viewModel.search() }
-            if !viewModel.searchQuery.isEmpty {
-                Button {
-                    viewModel.searchQuery = ""
-                    viewModel.searchResults = []
-                } label: {
-                    Image(systemName: "xmark.circle.fill")
-                        .foregroundStyle(.secondary)
-                }
-            }
-        }
-        .padding(12)
-        .background(Color(.systemBackground))
-        .cornerRadius(12)
-        .padding(.horizontal)
-
-        if !viewModel.searchResults.isEmpty {
-            VStack(alignment: .leading, spacing: 0) {
-                ForEach(viewModel.searchResults.prefix(5)) { note in
+        VStack(spacing: 0) {
+            HStack(spacing: 10) {
+                Image(systemName: "magnifyingglass")
+                    .foregroundStyle(.secondary)
+                TextField("Search notes...", text: $viewModel.searchQuery)
+                    .textFieldStyle(.plain)
+                    .onChange(of: viewModel.searchQuery) { _, _ in viewModel.search() }
+                if !viewModel.searchQuery.isEmpty {
                     Button {
-                        coordinator.openNote(note)
+                        viewModel.searchQuery = ""
+                        viewModel.searchResults = []
                     } label: {
-                        HStack {
-                            Text(note.displayEmoji)
-                                .font(.title3)
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text(note.displayTitle)
-                                    .font(.subheadline)
-                                    .fontWeight(.medium)
-                                Text(note.previewText)
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                                    .lineLimit(1)
-                            }
-                            Spacer()
-                        }
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 8)
+                        Image(systemName: "xmark.circle.fill")
+                            .foregroundStyle(.secondary)
                     }
-                    .buttonStyle(.plain)
                 }
             }
+            .padding(12)
             .background(Color(.systemBackground))
             .cornerRadius(12)
-            .padding(.horizontal)
+
+            if !viewModel.searchResults.isEmpty {
+                VStack(alignment: .leading, spacing: 0) {
+                    ForEach(viewModel.searchResults.prefix(5)) { note in
+                        Button {
+                            coordinator.openNote(note)
+                        } label: {
+                            HStack {
+                                Text(note.displayEmoji)
+                                    .font(.title3)
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text(note.displayTitle)
+                                        .font(.subheadline)
+                                        .fontWeight(.medium)
+                                    Text(note.previewText)
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                        .lineLimit(1)
+                                }
+                                Spacer()
+                            }
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 8)
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
+                .background(Color(.systemBackground))
+                .cornerRadius(12)
+            }
         }
+        .padding(.horizontal)
     }
 
     // MARK: - Sections
@@ -328,7 +330,7 @@ struct NoteCardView: View {
             }
         }
         .padding(12)
-        .background(note.colorHex.isEmpty ? Color(.systemBackground) : (Color(hex: note.colorHex) ?? .systemBackground).opacity(0.08))
+        .background(note.colorHex.isEmpty ? Color(.systemBackground) : (Color(hex: note.colorHex) ?? Color(.systemBackground)).opacity(0.08))
         .cornerRadius(14)
         .shadow(color: .black.opacity(0.04), radius: 4, y: 2)
     }
