@@ -2,6 +2,7 @@ import SwiftUI
 
 struct SearchView: View {
     @State private var viewModel: SearchViewModel
+    @Environment(AppCoordinator.self) private var coordinator
 
     init(viewModel: SearchViewModel) {
         self._viewModel = State(initialValue: viewModel)
@@ -31,7 +32,12 @@ struct SearchView: View {
                 } else {
                     List {
                         ForEach(viewModel.results) { note in
-                            NoteRowView(note: note)
+                            Button {
+                                coordinator.openNote(note)
+                            } label: {
+                                NoteRowView(note: note)
+                            }
+                            .buttonStyle(.plain)
                         }
                     }
                     .listStyle(.plain)

@@ -53,6 +53,8 @@
 		10000044 /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000044; };
 		10000045 /* KeyboardManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000045; };
 		10000047 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 00000047; };
+		10000048 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 00000049; };
+		10000049 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 00000050; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -104,6 +106,8 @@
 		00000046 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00000047 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		00000048 /* notes_s.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = notes_s.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		00000049 /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ar; path = ar.lproj/Localizable.strings; sourceTree = "<group>"; };
+		00000050 /* InfoPlist.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = InfoPlist.strings; path = ar.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,6 +126,8 @@
 			children = (
 				00000046 /* Info.plist */,
 				00000047 /* Assets.xcassets */,
+				00000049 /* ar */,
+				00000050 /* InfoPlist.strings */,
 				30000002 /* App */,
 				30000003 /* Core */,
 				30000004 /* Models */,
@@ -295,6 +301,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				ar,
 				Base,
 			);
 			mainGroup = 30000001;
@@ -313,6 +320,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				10000047 /* Assets.xcassets in Resources */,
+				10000048 /* Localizable.strings in Resources */,
+				10000049 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

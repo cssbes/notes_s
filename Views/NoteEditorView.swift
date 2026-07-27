@@ -2,6 +2,7 @@ import SwiftUI
 
 struct NoteEditorView: View {
     @State private var viewModel: NoteEditorViewModel
+    @State private var formattingController = TextFormattingController()
     @Environment(\.dismiss) private var dismiss
     @FocusState private var isTitleFocused: Bool
 
@@ -10,30 +11,33 @@ struct NoteEditorView: View {
     }
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 16) {
-                titleField
-                statisticsBar
-                FormattingToolbar(
-                    onBold: {},
-                    onItalic: {},
-                    onUnderline: {},
-                    onHeading: { _ in },
-                    onBulletList: {},
-                    onNumberedList: {},
-                    onChecklist: {},
-                    onQuote: {},
-                    onCode: {},
-                    onUndo: { viewModel.undo() },
-                    onRedo: { viewModel.redo() },
-                    canUndo: viewModel.canUndo,
-                    canRedo: viewModel.canRedo
-                )
-                contentEditor
-                blockList
-                addBlockButton
-            }
-            .padding()
+        VStack(spacing: 0) {
+            titleField
+                .padding(.horizontal)
+                .padding(.top, 8)
+
+            FormattingToolbar(
+                onBold: { formattingController.toggleBold() },
+                onItalic: { formattingController.toggleItalic() },
+                onUnderline: { formattingController.toggleUnderline() },
+                onHeading: { formattingController.applyHeading($0) },
+                onBulletList: { formattingController.toggleBulletList() },
+                onNumberedList: { formattingController.toggleNumberedList() },
+                onChecklist: {},
+                onQuote: { formattingController.applyQuote() },
+                onCode: { formattingController.applyCode() },
+                onUndo: { viewModel.undo() },
+                onRedo: { viewModel.redo() },
+                canUndo: viewModel.canUndo,
+                canRedo: viewModel.canRedo
+            )
+            .padding(.top, 4)
+
+            RichTextEditor(
+                htmlContent: $viewModel.content,
+                formattingController: formattingController
+            )
+            .padding(.horizontal)
         }
         .navigationTitle(viewModel.isNew ? "New Note" : "Edit Note")
         .navigationBarTitleDisplayMode(.inline)
@@ -95,91 +99,5 @@ struct NoteEditorView: View {
             .fontWeight(.bold)
             .textFieldStyle(.plain)
             .focused($isTitleFocused)
-    }
-
-    private var statisticsBar: some View {
-        StatisticsView(
-            wordCount: viewModel.wordCount,
-            characterCount: viewModel.characterCount,
-            readingTime: viewModel.readingTime
-        )
-    }
-
-    private var contentEditor: some View {
-        TextEditor(text: $viewModel.content)
-            .font(.body)
-            .frame(minHeight: 200)
-            .scrollContentBackground(.hidden)
-            .background(.clear)
-    }
-
-    private var blockList: some View {
-        ForEach(Array(viewModel.blocks.enumerated()), id: \.element.id) { index, block in
-            HStack(spacing: 8) {
-                BlockTypeMenu(type: block.type) { newType in
-                    withAnimation {
-                        viewModel.blocks[index].type = newType
-                    }
-                }
-
-                BlockView(
-                    block: block,
-                    isEditing: true,
-                    onContentChange: { newContent in
-                        viewModel.updateBlock(block, content: newContent)
-                    }
-                )
-
-                Button {
-                    withAnimation {
-                        viewModel.removeBlock(at: index)
-                    }
-                } label: {
-                    Image(systemName: "xmark.circle.fill")
-                        .font(.caption)
-                        .foregroundStyle(.tertiary)
-                }
-                .buttonStyle(.plain)
-            }
-        }
-    }
-
-    private var addBlockButton: some View {
-        Button {
-            viewModel.addBlock()
-        } label: {
-            HStack {
-                Image(systemName: "plus.circle.fill")
-                    .font(.title3)
-                    .foregroundStyle(.tertiary)
-                Text("Add block")
-                    .font(.subheadline)
-                    .foregroundStyle(.tertiary)
-            }
-        }
-        .buttonStyle(.plain)
-    }
-}
-
-struct BlockTypeMenu: View {
-    let type: BlockType
-    let onChange: (BlockType) -> Void
-
-    var body: some View {
-        Menu {
-            ForEach(BlockType.allCases) { blockType in
-                Button {
-                    onChange(blockType)
-                } label: {
-                    Label(blockType.displayName, systemImage: blockType.systemImage)
-                }
-            }
-        } label: {
-            Image(systemName: type.systemImage)
-                .font(.caption)
-                .foregroundStyle(.tertiary)
-                .frame(width: 24)
-        }
-        .buttonStyle(.plain)
     }
 }

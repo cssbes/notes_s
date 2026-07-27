@@ -2,6 +2,7 @@ import SwiftUI
 
 struct NoteListView: View {
     @State private var viewModel: NoteListViewModel
+    @Environment(AppCoordinator.self) private var coordinator
     @State private var showSortPicker = false
 
     init(viewModel: NoteListViewModel) {
@@ -21,8 +22,13 @@ struct NoteListView: View {
             } else {
                 List {
                     ForEach(viewModel.notes) { note in
-                        NoteRowView(note: note)
-                            .swipeActions(edge: .leading) {
+                        Button {
+                            coordinator.openNote(note)
+                        } label: {
+                            NoteRowView(note: note)
+                        }
+                        .buttonStyle(.plain)
+                        .swipeActions(edge: .leading) {
                                 Button {
                                     viewModel.toggleFavorite(note)
                                 } label: {
@@ -67,7 +73,7 @@ struct NoteListView: View {
                     }
 
                     Button {
-                        // New note
+                        coordinator.createNewNote()
                     } label: {
                         Image(systemName: "plus")
                     }

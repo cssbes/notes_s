@@ -22,5 +22,14 @@ extension String {
             .filter { !$0.isEmpty }
             .joined(separator: " ")
     }
+
+    var strippingHTML: String {
+        replacingOccurrences(of: "<[^>]+>", with: "", options: .regularExpression)
+            .replacingOccurrences(of: "&nbsp;", with: " ")
+            .replacingOccurrences(of: "&amp;", with: "&")
+            .replacingOccurrences(of: "&lt;", with: "<")
+            .replacingOccurrences(of: "&gt;", with: ">")
+            .replacingOccurrences(of: "&quot;", with: "\"")
+    }
 }
 

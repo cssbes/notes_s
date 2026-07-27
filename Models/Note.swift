@@ -46,10 +46,10 @@ final class Note {
     }
 
     func updateStatistics() {
-        characterCount = content.count
-        wordCount = content.split { $0.isWhitespace || $0.isNewline }.count
-        let wordsPerMinute = 200
-        readingTime = max(1, Int(ceil(Double(wordCount) / Double(wordsPerMinute))))
+        let plain = content.strippingHTML
+        characterCount = plain.count
+        wordCount = plain.split { $0.isWhitespace || $0.isNewline }.count
+        readingTime = max(1, Int(ceil(Double(wordCount) / 200)))
     }
 
     var isPinned: Bool {
@@ -63,12 +63,12 @@ final class Note {
     }
 
     var previewText: String {
-        let cleaned = content
+        let plain = content.strippingHTML
             .replacingOccurrences(of: "\n", with: " ")
             .trimmingCharacters(in: .whitespacesAndNewlines)
-        if cleaned.count > 100 {
-            return String(cleaned.prefix(100)) + "..."
+        if plain.count > 100 {
+            return String(plain.prefix(100)) + "..."
         }
-        return cleaned
+        return plain
     }
 }
