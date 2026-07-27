@@ -157,7 +157,7 @@ struct ChecklistBlockView: View {
             Button {
             } label: {
                 Image(systemName: block.isChecked ? "checkmark.circle.fill" : "circle")
-                    .foregroundStyle(block.isChecked ? Color.accentColor : Color.secondary)
+                    .foregroundStyle(block.isChecked ? Color.blue : Color.secondary)
                     .font(.body)
             }
             .buttonStyle(.plain)
