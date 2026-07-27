@@ -12,14 +12,14 @@ struct RichTextEditor: UIViewRepresentable {
         tv.delegate = context.coordinator
         tv.font = UIFont.systemFont(ofSize: 16)
         tv.backgroundColor = .clear
-        tv.attributedText = parseHTML(htmlContent) ?? NSAttributedString(string: htmlContent)
+        tv.attributedText = Self.parseHTML(htmlContent) ?? NSAttributedString(string: htmlContent)
         formattingController.textView = tv
         return tv
     }
 
     func updateUIView(_ uiView: UITextView, context: Context) {
         if !context.coordinator.isEditing && context.coordinator.lastHTML != htmlContent {
-            uiView.attributedText = parseHTML(htmlContent) ?? NSAttributedString(string: htmlContent)
+            uiView.attributedText = Self.parseHTML(htmlContent) ?? NSAttributedString(string: htmlContent)
             context.coordinator.lastHTML = htmlContent
         }
     }
@@ -40,14 +40,14 @@ struct RichTextEditor: UIViewRepresentable {
 
         func textViewDidChange(_ textView: UITextView) {
             isEditing = true
-            let html = toHTML(textView.attributedText)
+            let html = RichTextEditor.toHTML(textView.attributedText)
             parent.htmlContent = html
             lastHTML = html
             isEditing = false
         }
     }
 
-    private func parseHTML(_ html: String) -> NSAttributedString? {
+    private static func parseHTML(_ html: String) -> NSAttributedString? {
         guard !html.isEmpty else { return nil }
         if html.contains("<") {
             guard let data = html.data(using: .utf8) else { return nil }
@@ -60,7 +60,7 @@ struct RichTextEditor: UIViewRepresentable {
         return nil
     }
 
-    private func toHTML(_ attributed: NSAttributedString) -> String {
+    private static func toHTML(_ attributed: NSAttributedString) -> String {
         guard let data = try? attributed.data(
             from: NSRange(location: 0, length: attributed.length),
             documentAttributes: [.documentType: NSAttributedString.DocumentType.html]
