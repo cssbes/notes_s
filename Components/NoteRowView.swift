@@ -9,82 +9,59 @@ struct NoteRowView: View {
         return formatter.localizedString(for: note.updatedAt, relativeTo: Date())
     }
 
-    private var accentColor: Color {
-        Color(hex: note.colorHex) ?? .blue
-    }
-
     var body: some View {
         HStack(spacing: 14) {
             if !note.emoji.isEmpty {
                 Text(note.emoji)
                     .font(.title2)
-                    .frame(width: 36, height: 36)
-                    .background(accentColor.opacity(0.1))
-                    .cornerRadius(10)
             }
 
             VStack(alignment: .leading, spacing: 4) {
                 HStack(spacing: 6) {
-                    if note.isPinned {
-                        Image(systemName: "pin.fill")
-                            .font(.caption2)
-                            .foregroundStyle(.secondary)
-                    }
-
                     Text(note.displayTitle)
-                        .font(.headline)
+                        .font(.system(size: 16, weight: .semibold, design: .rounded))
+                        .foregroundStyle(Color.themeText)
                         .lineLimit(1)
-
-                    Spacer(minLength: 0)
-
+                    Spacer()
                     if note.isFavorite {
-                        Image(systemName: "star.fill")
-                            .font(.caption2)
-                            .foregroundStyle(.yellow)
+                        Image(systemName: "star.fill").font(.caption2).foregroundStyle(.yellow)
+                    }
+                    if note.isPinned {
+                        Image(systemName: "pin.fill").font(.caption2).foregroundStyle(Color.themeSubtle)
                     }
                 }
 
                 if !note.previewText.isEmpty {
                     Text(note.previewText)
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
+                        .font(.system(size: 14, design: .rounded))
+                        .foregroundStyle(Color.themeSubtle)
                         .lineLimit(2)
                 }
 
                 HStack(spacing: 10) {
-                    Label(dateText, systemImage: "clock")
+                    Text(dateText)
                         .font(.caption)
-                        .foregroundStyle(.tertiary)
-
-                    if !note.tags.isEmpty {
-                        ForEach(note.tags.prefix(3)) { tag in
-                            Text(tag.name)
-                                .font(.caption2)
-                                .foregroundStyle(.white)
-                                .padding(.horizontal, 7)
-                                .padding(.vertical, 2)
-                                .background(Color(hex: tag.colorHex) ?? .blue)
-                                .cornerRadius(5)
-                        }
-                    }
+                        .foregroundStyle(Color.themeSubtle)
 
                     if note.wordCount > 0 {
-                        Label("\(note.wordCount) words", systemImage: "text.word.count")
+                        Text("\(note.wordCount)w")
                             .font(.caption)
-                            .foregroundStyle(.tertiary)
+                            .foregroundStyle(Color.themeSubtle)
+                    }
+
+                    if !note.tags.isEmpty {
+                        ForEach(note.tags.prefix(2)) { tag in
+                            Text(tag.name)
+                                .font(.caption2)
+                                .foregroundStyle(Color.themeAccent)
+                                .padding(.horizontal, 6).padding(.vertical, 2)
+                                .background(Color.themeAccent.opacity(0.1))
+                                .cornerRadius(4)
+                        }
                     }
                 }
             }
         }
-        .padding(.vertical, 6)
-        .padding(.leading, 8)
-        .overlay(
-            Rectangle()
-                .fill(accentColor)
-                .frame(width: 4)
-                .cornerRadius(2),
-            alignment: .leading
-        )
         .contentShape(Rectangle())
     }
 }

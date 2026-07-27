@@ -3,14 +3,14 @@ import SwiftUI
 @main
 struct NotesApp: App {
     @State private var coordinator = AppCoordinator(container: AppDependencyContainer())
-    @AppStorage("accentColorHex") private var accentColorHex = "#007AFF"
+    @AppStorage("accentColorHex") private var accentColorHex = "#C77D4A"
     @AppStorage("themeRaw") private var themeRaw = AppTheme.system.rawValue
 
     var body: some Scene {
         WindowGroup {
             MainTabView()
                 .environment(coordinator)
-                .tint(Color(hex: accentColorHex) ?? .blue)
+                .tint(Color(hex: accentColorHex) ?? .orange)
                 .preferredColorScheme(colorScheme)
         }
     }
@@ -32,43 +32,27 @@ struct MainTabView: View {
 
         TabView(selection: $coordinator.selectedTab) {
             HomeView(viewModel: coordinator.container.makeHomeViewModel())
-                .tabItem {
-                    Image(systemName: "house.fill")
-                    Text("Home")
-                }
+                .tabItem { Image(systemName: "house"); Text("Home") }
                 .tag(AppCoordinator.Tab.home)
 
             NoteListView(viewModel: coordinator.container.makeNoteListViewModel())
-                .tabItem {
-                    Image(systemName: "note.text")
-                    Text("All Notes")
-                }
+                .tabItem { Image(systemName: "note.text"); Text("All Notes") }
                 .tag(AppCoordinator.Tab.folders)
 
             SearchView(viewModel: coordinator.container.makeSearchViewModel())
-                .tabItem {
-                    Image(systemName: "magnifyingglass")
-                    Text("Search")
-                }
+                .tabItem { Image(systemName: "magnifyingglass"); Text("Search") }
                 .tag(AppCoordinator.Tab.search)
 
             SettingsView(viewModel: coordinator.container.makeSettingsViewModel())
-                .tabItem {
-                    Image(systemName: "gearshape.fill")
-                    Text("Settings")
-                }
+                .tabItem { Image(systemName: "gearshape"); Text("Settings") }
                 .tag(AppCoordinator.Tab.settings)
         }
         .fullScreenCover(isPresented: $coordinator.showNoteEditor) {
             NavigationStack {
                 if let note = coordinator.editingNote {
-                    NoteEditorView(
-                        viewModel: coordinator.container.makeNoteEditorViewModel(note: note)
-                    )
+                    NoteEditorView(viewModel: coordinator.container.makeNoteEditorViewModel(note: note))
                 } else {
-                    NoteEditorView(
-                        viewModel: coordinator.container.makeNoteEditorViewModel()
-                    )
+                    NoteEditorView(viewModel: coordinator.container.makeNoteEditorViewModel())
                 }
             }
         }
