@@ -57,6 +57,12 @@
 		10000049 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 00000050; };
 		10000050 /* RichTextEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000051; };
 		10000051 /* TextFormattingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000052; };
+		10000052 /* TaskItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000053; };
+		10000053 /* TaskService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000054; };
+		10000054 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000055; };
+		10000055 /* TaskViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000056; };
+		10000056 /* TasksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000057; };
+		10000057 /* TaskEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000058; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -112,6 +118,12 @@
 		00000050 /* InfoPlist.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = InfoPlist.strings; path = ar.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		00000051 /* RichTextEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RichTextEditor.swift; sourceTree = "<group>"; };
 		00000052 /* TextFormattingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFormattingController.swift; sourceTree = "<group>"; };
+		00000053 /* TaskItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskItem.swift; sourceTree = "<group>"; };
+		00000054 /* TaskService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskService.swift; sourceTree = "<group>"; };
+		00000055 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
+		00000056 /* TaskViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskViewModel.swift; sourceTree = "<group>"; };
+		00000057 /* TasksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasksView.swift; sourceTree = "<group>"; };
+		00000058 /* TaskEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskEditorView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -172,6 +184,7 @@
 				00000007 /* NoteBlock.swift */,
 				00000008 /* SortOption.swift */,
 				00000009 /* AppSettings.swift */,
+				00000053 /* TaskItem.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -187,6 +200,7 @@
 				00000015 /* SettingsViewModel.swift */,
 				00000016 /* TrashViewModel.swift */,
 				00000017 /* ArchiveViewModel.swift */,
+				00000056 /* TaskViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -202,6 +216,8 @@
 				00000023 /* SettingsView.swift */,
 				00000024 /* TrashView.swift */,
 				00000025 /* ArchiveView.swift */,
+				00000057 /* TasksView.swift */,
+				00000058 /* TaskEditorView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -229,6 +245,8 @@
 				00000035 /* ExportService.swift */,
 				00000036 /* BackupService.swift */,
 				00000037 /* SearchService.swift */,
+				00000054 /* TaskService.swift */,
+				00000055 /* NotificationService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -385,6 +403,12 @@
 				10000045 /* KeyboardManager.swift in Sources */,
 				10000050 /* RichTextEditor.swift in Sources */,
 				10000051 /* TextFormattingController.swift in Sources */,
+				10000052 /* TaskItem.swift in Sources */,
+				10000053 /* TaskService.swift in Sources */,
+				10000054 /* NotificationService.swift in Sources */,
+				10000055 /* TaskViewModel.swift in Sources */,
+				10000056 /* TasksView.swift in Sources */,
+				10000057 /* TaskEditorView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
