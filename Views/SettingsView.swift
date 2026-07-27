@@ -28,19 +28,7 @@ struct SettingsView: View {
 
                 editorSection
 
-                Section {
-                    Toggle(isOn: $lockEnabled) {
-                        lockToggleLabel
-                    }
-                    .onChange(of: lockEnabled) { _, newValue in
-                        if newValue {
-                            Task { await LockService.shared.authenticate(reason: "Enable lock"); lockEnabled = LockService.shared.isEnabled }
-                        } else {
-                            LockService.shared.setEnabled(false)
-                        }
-                    }
-                    .disabled(!LockService.shared.isLockAvailable)
-                } header: { Text("Security").textCase(.uppercase).font(.system(size: 12, weight: .semibold)).foregroundStyle(Color.nSecondary) }
+                securitySection
 
                 Section {
                     Button { showInsights = true } label: {
@@ -159,11 +147,11 @@ struct SettingsView: View {
         }
     }
 
-    private var lockToggleLabel: some View {
-        let icon = LockService.shared.biometryType == .faceID ? "faceid" : "touchid"
-        return HStack {
-            Image(systemName: icon).foregroundStyle(Color.nAccent)
-            Text("Biometric Lock")
+    @ViewBuilder private var securitySection: some View {
+        Section {
+            SecurityToggle(lockEnabled: $lockEnabled)
+        } header: {
+            Text("Security").textCase(.uppercase).font(.system(size: 12, weight: .semibold)).foregroundStyle(Color.nSecondary)
         }
     }
 
@@ -195,4 +183,26 @@ struct SettingsView: View {
         ("Red", "#FF3B30"), ("Purple", "#AF52DE"), ("Pink", "#FF2D55"),
         ("Teal", "#5AC8FA"), ("Indigo", "#5856D6"), ("Yellow", "#FFCC00")
     ]
+}
+
+private struct SecurityToggle: View {
+    @Binding var lockEnabled: Bool
+
+    var body: some View {
+        Toggle(isOn: $lockEnabled) {
+            let icon = LockService.shared.biometryType == .faceID ? "faceid" : "touchid"
+            HStack {
+                Image(systemName: icon).foregroundStyle(Color.nAccent)
+                Text("Biometric Lock")
+            }
+        }
+        .onChange(of: lockEnabled) { _, newValue in
+            if newValue {
+                Task { await LockService.shared.authenticate(reason: "Enable lock"); lockEnabled = LockService.shared.isEnabled }
+            } else {
+                LockService.shared.setEnabled(false)
+            }
+        }
+        .disabled(!LockService.shared.isLockAvailable)
+    }
 }
