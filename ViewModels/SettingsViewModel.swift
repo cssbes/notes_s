@@ -81,7 +81,7 @@ final class SettingsViewModel {
         successMessage = nil
 
         do {
-            try backupService.createBackup()
+            let _ = try backupService.createBackup()
             lastBackupDate = Date()
             successMessage = "Backup created successfully."
         } catch {
