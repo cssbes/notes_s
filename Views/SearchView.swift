@@ -11,23 +11,19 @@ struct SearchView: View {
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
-                filterPicker
+                filterBar
 
                 if viewModel.isSearching {
                     Spacer()
                     ProgressView("Searching...")
                     Spacer()
                 } else if viewModel.isEmptyQuery {
-                    EmptyStateView(
-                        title: "Search Notes",
-                        message: "Search by title, content, tags, or folders.",
-                        systemImage: "magnifyingglass"
-                    )
+                    recentSearches
                 } else if !viewModel.hasResults {
-                    EmptyStateView(
-                        title: "No Results",
-                        message: "No notes match \"\(viewModel.query)\".",
-                        systemImage: "magnifyingglass"
+                    ContentUnavailableView(
+                        "No Results",
+                        systemImage: "magnifyingglass",
+                        description: Text("No notes match \"\(viewModel.query)\".")
                     )
                 } else {
                     List {
@@ -47,7 +43,7 @@ struct SearchView: View {
             .searchable(
                 text: $viewModel.query,
                 placement: .navigationBarDrawer(displayMode: .always),
-                prompt: "Search notes"
+                prompt: "Search notes by title, content, tags, folder..."
             )
             .onChange(of: viewModel.query) { _, newValue in
                 if newValue.isEmpty {
@@ -62,16 +58,65 @@ struct SearchView: View {
         }
     }
 
-    private var filterPicker: some View {
-        Picker("Filter", selection: $viewModel.filter) {
-            ForEach(NoteListFilter.allCases) { filter in
-                Text(filter.displayName).tag(filter)
+    private var filterBar: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 8) {
+                ForEach(NoteListFilter.allCases) { filter in
+                    Button {
+                        viewModel.setFilter(filter)
+                    } label: {
+                        Text(filter.displayName)
+                            .font(.subheadline)
+                            .fontWeight(viewModel.filter == filter ? .semibold : .regular)
+                            .padding(.horizontal, 14)
+                            .padding(.vertical, 6)
+                            .background(viewModel.filter == filter ? Color.blue : Color(.systemGray6))
+                            .foregroundStyle(viewModel.filter == filter ? .white : .primary)
+                            .cornerRadius(8)
+                    }
+                    .buttonStyle(.plain)
+                }
             }
+            .padding(.horizontal)
+            .padding(.vertical, 8)
         }
-        .pickerStyle(.segmented)
-        .padding()
-        .onChange(of: viewModel.filter) { _, _ in
-            viewModel.search()
+    }
+
+    @ViewBuilder
+    private var recentSearches: some View {
+        if !viewModel.recentSearches.isEmpty {
+            VStack(alignment: .leading, spacing: 8) {
+                Text("Recent Searches")
+                    .font(.subheadline)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(.secondary)
+                    .padding(.horizontal)
+
+                ForEach(viewModel.recentSearches, id: \.self) { term in
+                    Button {
+                        viewModel.query = term
+                        viewModel.search()
+                    } label: {
+                        HStack {
+                            Image(systemName: "clock.arrow.circlepath")
+                                .foregroundStyle(.secondary)
+                            Text(term)
+                                .foregroundStyle(.primary)
+                            Spacer()
+                        }
+                        .padding(.horizontal)
+                        .padding(.vertical, 6)
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+            .padding(.top)
+        } else {
+            ContentUnavailableView(
+                "Search Notes",
+                systemImage: "magnifyingglass",
+                description: Text("Search by title, content, tags, or folders.")
+            )
         }
     }
 }

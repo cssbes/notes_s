@@ -17,6 +17,7 @@ struct SettingsView: View {
         NavigationStack {
             Form {
                 appearanceSection
+                languageSection
                 editorSection
                 backupSection
                 aboutSection
@@ -67,11 +68,41 @@ struct SettingsView: View {
 
     private var appearanceSection: some View {
         Section("Appearance") {
-            Toggle(isOn: $viewModel.isDarkMode) {
-                Label("Dark Mode", systemImage: "moon.fill")
+            Picker("Theme", selection: $viewModel.theme) {
+                ForEach(AppTheme.allCases) { theme in
+                    Label(theme.displayName, systemImage: theme.systemImage).tag(theme)
+                }
             }
-            .onChange(of: viewModel.isDarkMode) { _, _ in
-                viewModel.saveThemePreference()
+            .onChange(of: viewModel.theme) { _, _ in
+                viewModel.saveTheme()
+            }
+
+            Picker("Accent Color", selection: $viewModel.accentColorHex) {
+                ForEach(accentColors, id: \.hex) { color in
+                    HStack {
+                        Circle()
+                            .fill(Color(hex: color.hex) ?? .blue)
+                            .frame(width: 20, height: 20)
+                        Text(color.name)
+                    }.tag(color.hex)
+                }
+            }
+            .onChange(of: viewModel.accentColorHex) { _, _ in
+                viewModel.saveAccentColor()
+            }
+        }
+    }
+
+    private var languageSection: some View {
+        Section("Language") {
+            Picker("Language", selection: $viewModel.language) {
+                ForEach(AppLanguage.allCases) { lang in
+                    Text(lang.displayName).tag(lang)
+                }
+            }
+            .onChange(of: viewModel.language) { _, _ in
+                viewModel.saveLanguage()
+                updateLocale()
             }
         }
     }
@@ -95,6 +126,15 @@ struct SettingsView: View {
                 Text("\(Int(viewModel.fontSize)) pt")
                     .font(.caption)
                     .foregroundStyle(.secondary)
+            }
+
+            Picker("Font Family", selection: $viewModel.fontFamily) {
+                ForEach(AppFontFamily.allCases) { family in
+                    Text(family.displayName).tag(family)
+                }
+            }
+            .onChange(of: viewModel.fontFamily) { _, _ in
+                viewModel.saveFontFamily()
             }
         }
     }
@@ -146,4 +186,16 @@ struct SettingsView: View {
             }
         }
     }
+
+    private func updateLocale() {
+        guard let identifier = viewModel.language.localeIdentifier else { return }
+        UserDefaults.standard.set([identifier], forKey: "AppleLanguages")
+        UserDefaults.standard.synchronize()
+    }
+
+    private let accentColors: [(name: String, hex: String)] = [
+        ("Blue", "#007AFF"), ("Green", "#34C759"), ("Orange", "#FF9500"),
+        ("Red", "#FF3B30"), ("Purple", "#AF52DE"), ("Pink", "#FF2D55"),
+        ("Yellow", "#FFCC00"), ("Teal", "#5AC8FA"), ("Indigo", "#5856D6")
+    ]
 }

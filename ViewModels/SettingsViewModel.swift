@@ -10,6 +10,10 @@ final class SettingsViewModel {
 
     var isDarkMode = false
     var fontSize: Double = 16.0
+    var fontFamily: AppFontFamily = .system
+    var language: AppLanguage = .auto
+    var theme: AppTheme = .system
+    var accentColorHex: String = "#007AFF"
     var lastBackupDate: Date?
     var isLoading = false
     var errorMessage: String?
@@ -37,6 +41,10 @@ final class SettingsViewModel {
             if let settings = settings.first {
                 isDarkMode = settings.isDarkMode
                 fontSize = settings.fontSize
+                fontFamily = settings.fontFamily
+                language = settings.language
+                theme = settings.theme
+                accentColorHex = settings.accentColorHex
             } else {
                 let defaults = AppSettings()
                 noteService.context.insert(defaults)
@@ -52,23 +60,35 @@ final class SettingsViewModel {
     }
 
     func saveThemePreference() {
-        do {
-            let descriptor = FetchDescriptor<AppSettings>()
-            let settings = try noteService.context.fetch(descriptor)
-            let appSettings = settings.first ?? AppSettings()
-            appSettings.isDarkMode = isDarkMode
-            try noteService.context.save()
-        } catch {
-            errorMessage = error.localizedDescription
-        }
+        save { $0.isDarkMode = isDarkMode }
     }
 
     func saveFontSize() {
+        save { $0.fontSize = fontSize }
+    }
+
+    func saveFontFamily() {
+        save { $0.fontFamily = fontFamily }
+    }
+
+    func saveLanguage() {
+        save { $0.language = language }
+    }
+
+    func saveTheme() {
+        save { $0.theme = theme }
+    }
+
+    func saveAccentColor() {
+        save { $0.accentColorHex = accentColorHex }
+    }
+
+    private func save(_ update: (inout AppSettings) -> Void) {
         do {
             let descriptor = FetchDescriptor<AppSettings>()
             let settings = try noteService.context.fetch(descriptor)
             let appSettings = settings.first ?? AppSettings()
-            appSettings.fontSize = fontSize
+            update(&appSettings)
             try noteService.context.save()
         } catch {
             errorMessage = error.localizedDescription

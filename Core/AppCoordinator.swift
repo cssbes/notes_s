@@ -8,15 +8,20 @@ final class AppCoordinator {
     var selectedNote: Note?
     var showNoteEditor = false
     var editingNote: Note?
+    var showFolderList = false
+    var showArchive = false
+    var showTrash = false
 
     enum Tab: String, CaseIterable {
         case home
+        case folders
         case search
         case settings
 
         var title: String {
             switch self {
             case .home: return "Home"
+            case .folders: return "Folders"
             case .search: return "Search"
             case .settings: return "Settings"
             }
@@ -25,6 +30,7 @@ final class AppCoordinator {
         var icon: String {
             switch self {
             case .home: return "house"
+            case .folders: return "folder"
             case .search: return "magnifyingglass"
             case .settings: return "gearshape"
             }

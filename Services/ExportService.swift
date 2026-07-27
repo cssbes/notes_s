@@ -19,44 +19,19 @@ enum ExportError: LocalizedError {
 
     func exportToMarkdown(_ note: Note) throws -> Data {
         var md = "# \(note.title)\n\n"
-
-        for block in note.blocks.sorted(by: { $0.orderIndex < $1.orderIndex }) {
-            switch block.type {
-            case .text:
-                md += "\(block.content)\n\n"
-            case .heading1:
-                md += "# \(block.content)\n\n"
-            case .heading2:
-                md += "## \(block.content)\n\n"
-            case .heading3:
-                md += "### \(block.content)\n\n"
-            case .bulletListItem:
-                md += "- \(block.content)\n"
-            case .numberedListItem:
-                md += "1. \(block.content)\n"
-            case .checklistItem:
-                let checked = block.isChecked ? "x" : " "
-                md += "- [\(checked)] \(block.content)\n"
-            case .quote:
-                md += "> \(block.content)\n\n"
-            case .code:
-                md += "```\n\(block.content)\n```\n\n"
-            case .image:
-                md += "![\(block.content)](\(block.metadata ?? ""))\n\n"
-            case .table:
-                md += "\(block.content)\n\n"
-            case .divider:
-                md += "---\n\n"
-            }
-        }
-
+        md += parseContentToMarkdown(note.content)
         md += "\n---\n"
-        let formatter = DateFormatter()
-        formatter.dateStyle = .long
-        formatter.timeStyle = .short
-        md += "Exported from Notes on \(formatter.string(from: Date()))\n"
-
+        md += "Exported from Notes on \(Date().formatted(date: .long, time: .short))\n"
         guard let data = md.data(using: .utf8) else {
+            throw ExportError.encodingFailed
+        }
+        return data
+    }
+
+    func exportToPlainText(_ note: Note) throws -> Data {
+        let plain = note.content.strippingHTML
+        let text = "\(note.title)\n\n\(plain)\n\n---\nExported from Notes"
+        guard let data = text.data(using: .utf8) else {
             throw ExportError.encodingFailed
         }
         return data
@@ -71,20 +46,20 @@ enum ExportError: LocalizedError {
             "updatedAt": note.updatedAt.timeIntervalSince1970,
             "isFavorite": note.isFavorite,
             "isArchived": note.isArchived,
+            "isTrashed": note.isTrashed,
+            "emoji": note.emoji,
+            "colorHex": note.colorHex,
             "tags": note.tags.map { $0.name },
-            "folder": note.folder?.name ?? ""
+            "folder": note.folder?.name ?? "",
+            "wordCount": note.wordCount,
+            "characterCount": note.characterCount,
+            "readingTime": note.readingTime
         ]
-
-        let data = try JSONSerialization.data(
-            withJSONObject: exportDict,
-            options: [.prettyPrinted, .sortedKeys]
-        )
-        return data
+        return try JSONSerialization.data(withJSONObject: exportDict, options: [.prettyPrinted, .sortedKeys])
     }
 
     func exportAllNotes(_ notes: [Note]) throws -> Data {
         var allData: [[String: Any]] = []
-
         for note in notes {
             let dict: [String: Any] = [
                 "id": note.id.uuidString,
@@ -95,22 +70,24 @@ enum ExportError: LocalizedError {
                 "isFavorite": note.isFavorite,
                 "isArchived": note.isArchived,
                 "isTrashed": note.isTrashed,
+                "emoji": note.emoji,
+                "colorHex": note.colorHex,
                 "tags": note.tags.map { $0.name },
                 "folder": note.folder?.name ?? ""
             ]
             allData.append(dict)
         }
-
         let exportDict: [String: Any] = [
             "app": "Notes",
             "version": "1.0",
             "exportedAt": Date().timeIntervalSince1970,
             "notes": allData
         ]
+        return try JSONSerialization.data(withJSONObject: exportDict, options: [.prettyPrinted, .sortedKeys])
+    }
 
-        return try JSONSerialization.data(
-            withJSONObject: exportDict,
-            options: [.prettyPrinted, .sortedKeys]
-        )
+    private func parseContentToMarkdown(_ html: String) -> String {
+        let plain = html.strippingHTML
+        return plain + "\n\n"
     }
 }

@@ -4,6 +4,9 @@ struct NoteListView: View {
     @State private var viewModel: NoteListViewModel
     @Environment(AppCoordinator.self) private var coordinator
     @State private var showSortPicker = false
+    @State private var showFolderPicker = false
+    @State private var selectedNote: Note?
+    @State private var multiSelection = Set<UUID>()
 
     init(viewModel: NoteListViewModel) {
         self._viewModel = State(initialValue: viewModel)
@@ -17,10 +20,10 @@ struct NoteListView: View {
                     message: "Notes you create will appear here.",
                     systemImage: "note.text",
                     actionTitle: "New Note",
-                    action: {}
+                    action: { coordinator.createNewNote() }
                 )
             } else {
-                List {
+                List(selection: $multiSelection) {
                     ForEach(viewModel.notes) { note in
                         Button {
                             coordinator.openNote(note)
@@ -28,35 +31,74 @@ struct NoteListView: View {
                             NoteRowView(note: note)
                         }
                         .buttonStyle(.plain)
-                        .swipeActions(edge: .leading) {
+                        .contextMenu {
+                            Section {
                                 Button {
                                     viewModel.toggleFavorite(note)
                                 } label: {
-                                    Label("Favorite", systemImage: "star")
+                                    Label(note.isFavorite ? "Unfavorite" : "Favorite", systemImage: note.isFavorite ? "star.slash" : "star")
                                 }
-                                .tint(.yellow)
-
                                 Button {
                                     viewModel.togglePin(note)
                                 } label: {
-                                    Label("Pin", systemImage: "pin")
+                                    Label(note.isPinned ? "Unpin" : "Pin", systemImage: note.isPinned ? "pin.slash" : "pin")
                                 }
-                                .tint(.orange)
                             }
-                            .swipeActions(edge: .trailing) {
+                            Section {
+                                Button {
+                                    selectedNote = note
+                                    showFolderPicker = true
+                                } label: {
+                                    Label("Move to Folder", systemImage: "folder")
+                                }
+                                Button {
+                                    duplicateNote(note)
+                                } label: {
+                                    Label("Duplicate", systemImage: "doc.on.doc")
+                                }
+                            }
+                            Section {
+                                Button(role: .destructive) {
+                                    viewModel.archiveNote(note)
+                                } label: {
+                                    Label("Archive", systemImage: "archivebox")
+                                }
                                 Button(role: .destructive) {
                                     viewModel.deleteNote(note)
                                 } label: {
                                     Label("Delete", systemImage: "trash")
                                 }
-
-                                Button {
-                                    viewModel.archiveNote(note)
-                                } label: {
-                                    Label("Archive", systemImage: "archivebox")
-                                }
-                                .tint(.gray)
                             }
+                        }
+                        .swipeActions(edge: .leading) {
+                            Button {
+                                viewModel.toggleFavorite(note)
+                            } label: {
+                                Label("Favorite", systemImage: "star")
+                            }
+                            .tint(.yellow)
+
+                            Button {
+                                viewModel.togglePin(note)
+                            } label: {
+                                Label("Pin", systemImage: "pin")
+                            }
+                            .tint(.orange)
+                        }
+                        .swipeActions(edge: .trailing) {
+                            Button(role: .destructive) {
+                                viewModel.deleteNote(note)
+                            } label: {
+                                Label("Delete", systemImage: "trash")
+                            }
+
+                            Button {
+                                viewModel.archiveNote(note)
+                            } label: {
+                                Label("Archive", systemImage: "archivebox")
+                            }
+                            .tint(.gray)
+                        }
                     }
                 }
                 .listStyle(.plain)
@@ -87,6 +129,33 @@ struct NoteListView: View {
                 }
             }
         }
+        .sheet(isPresented: $showFolderPicker) {
+            if let note = selectedNote {
+                folderPickerSheet(for: note)
+            }
+        }
         .onAppear { viewModel.loadNotes() }
+    }
+
+    private func duplicateNote(_ note: Note) {
+        let copy = note.duplicate()
+        let context = viewModel.noteService.context
+        context.insert(copy)
+        try? context.save()
+        viewModel.loadNotes()
+    }
+
+    private func folderPickerSheet(for note: Note) -> some View {
+        NavigationStack {
+            FolderPickerView(
+                noteService: viewModel.noteService,
+                selectedFolder: note.folder
+            ) { folder in
+                note.folder = folder
+                try? viewModel.noteService.context.save()
+                viewModel.loadNotes()
+                showFolderPicker = false
+            }
+        }
     }
 }

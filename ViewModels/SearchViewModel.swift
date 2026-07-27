@@ -12,6 +12,7 @@ final class SearchViewModel {
     var filter: NoteListFilter = .all
     var isSearching = false
     var errorMessage: String?
+    var recentSearches: [String] = []
 
     var hasResults: Bool { !results.isEmpty }
     var isEmptyQuery: Bool { query.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
@@ -31,6 +32,10 @@ final class SearchViewModel {
 
         do {
             results = try searchService.search(query: query, filter: filter)
+            if !results.isEmpty && !recentSearches.contains(query) {
+                recentSearches.insert(query, at: 0)
+                if recentSearches.count > 10 { recentSearches.removeLast() }
+            }
         } catch {
             errorMessage = error.localizedDescription
             results = []

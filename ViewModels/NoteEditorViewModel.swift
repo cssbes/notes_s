@@ -1,11 +1,13 @@
 import Foundation
 import SwiftData
 import Observation
+import UniformTypeIdentifiers
 
 @MainActor
 @Observable
 final class NoteEditorViewModel {
     private let noteService: NoteService
+    private let exportService: ExportService
 
     var note: Note
     var title: String
@@ -15,6 +17,10 @@ final class NoteEditorViewModel {
     var isSaving = false
     var errorMessage: String?
     var showDeleteConfirmation = false
+    var showExportPicker = false
+    var showFolderPicker = false
+    var showEmojiPicker = false
+    var showColorPicker = false
 
     var wordCount: Int { note.wordCount }
     var characterCount: Int { note.characterCount }
@@ -30,6 +36,7 @@ final class NoteEditorViewModel {
 
     init(noteService: NoteService, note: Note? = nil) {
         self.noteService = noteService
+        self.exportService = ExportService()
 
         if let existingNote = note {
             self.note = existingNote
@@ -107,6 +114,25 @@ final class NoteEditorViewModel {
         }
     }
 
+    func duplicateNote() {
+        let copy = note.duplicate()
+        noteService.context.insert(copy)
+        do {
+            try noteService.context.save()
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+    }
+
+    func moveToFolder(_ folder: Folder?) {
+        note.folder = folder
+        do {
+            try noteService.updateNote(note)
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+    }
+
     func addBlock(type: BlockType = .text) {
         let block = NoteBlock(type: type, content: "", orderIndex: blocks.count)
         blocks.append(block)
@@ -134,8 +160,6 @@ final class NoteEditorViewModel {
         }
     }
 
-    // MARK: - Undo/Redo
-
     func pushUndo() {
         redoStack.removeAll()
         if undoStack.last != content {
@@ -157,9 +181,21 @@ final class NoteEditorViewModel {
         content = state
     }
 
-    // MARK: - Statistics
-
     func updateStatistics() {
         note.updateStatistics()
+    }
+
+    // MARK: - Export
+
+    func exportMarkdown() -> Data? {
+        try? exportService.exportToMarkdown(note)
+    }
+
+    func exportPlainText() -> Data? {
+        try? exportService.exportToPlainText(note)
+    }
+
+    func exportJSON() -> Data? {
+        try? exportService.exportToJSON(note)
     }
 }

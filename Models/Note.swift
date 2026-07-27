@@ -17,6 +17,8 @@ final class Note {
     var characterCount: Int
     var readingTime: Int
     var orderIndex: Int
+    var emoji: String
+    var colorHex: String
 
     @Relationship(deleteRule: .cascade, inverse: \NoteBlock.note) var blocks: [NoteBlock]
     @Relationship(inverse: \Folder.notes) var folder: Folder?
@@ -25,7 +27,9 @@ final class Note {
     init(
         title: String = "",
         content: String = "",
-        folder: Folder? = nil
+        folder: Folder? = nil,
+        emoji: String = "",
+        colorHex: String = ""
     ) {
         self.id = UUID()
         self.title = title
@@ -39,6 +43,8 @@ final class Note {
         self.characterCount = 0
         self.readingTime = 0
         self.orderIndex = 0
+        self.emoji = emoji
+        self.colorHex = colorHex
         self.blocks = []
         self.folder = folder
         self.tags = []
@@ -70,5 +76,19 @@ final class Note {
             return String(plain.prefix(100)) + "..."
         }
         return plain
+    }
+
+    var displayTitle: String {
+        title.isEmpty ? "Untitled" : title
+    }
+
+    var displayEmoji: String {
+        emoji.isEmpty ? "📝" : emoji
+    }
+
+    func duplicate() -> Note {
+        let copy = Note(title: title, content: content, folder: folder, emoji: emoji, colorHex: colorHex)
+        copy.tags = tags
+        return copy
     }
 }
