@@ -71,22 +71,29 @@ struct HomeView: View {
     }
 
     private func statCard(value: String, label: String, icon: String, color: Color) -> some View {
-        VStack(spacing: 4) {
+        VStack(spacing: 6) {
             Image(systemName: icon)
                 .font(.title3)
                 .foregroundStyle(color)
             Text(value)
                 .font(.title2)
                 .fontWeight(.bold)
+                .monospacedDigit()
             Text(label)
                 .font(.caption2)
                 .foregroundStyle(.secondary)
         }
         .frame(maxWidth: .infinity)
-        .padding(12)
-        .background(Color(.systemBackground))
-        .cornerRadius(14)
-        .shadow(color: .black.opacity(0.03), radius: 4, y: 2)
+        .padding(14)
+        .background(
+            LinearGradient(
+                colors: [Color(.systemBackground), color.opacity(0.06)],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        )
+        .cornerRadius(16)
+        .shadow(color: color.opacity(0.08), radius: 6, y: 3)
     }
 
     // MARK: - Quick Search
@@ -250,14 +257,17 @@ struct HomeView: View {
     // MARK: - Helpers
 
     private func sectionHeader(_ title: String, icon: String) -> some View {
-        HStack(spacing: 6) {
+        HStack(spacing: 8) {
             Image(systemName: icon)
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(.tint)
+                .frame(width: 24, height: 24)
+                .background(.tint.opacity(0.1))
+                .cornerRadius(6)
             Text(title)
                 .font(.subheadline)
                 .fontWeight(.semibold)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(.primary)
             Spacer()
         }
         .padding(.horizontal)
@@ -287,6 +297,10 @@ struct HomeView: View {
 
 struct NoteCardView: View {
     let note: Note
+
+    private var cardColor: Color {
+        Color(hex: note.colorHex) ?? .blue
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -329,10 +343,21 @@ struct NoteCardView: View {
                 }
             }
         }
-        .padding(12)
-        .background(note.colorHex.isEmpty ? Color(.systemBackground) : (Color(hex: note.colorHex) ?? Color(.systemBackground)).opacity(0.08))
-        .cornerRadius(14)
-        .shadow(color: .black.opacity(0.04), radius: 4, y: 2)
+        .padding(14)
+        .background(
+            ZStack {
+                Color(.systemBackground)
+                if !note.colorHex.isEmpty {
+                    cardColor.opacity(0.06)
+                }
+            }
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 16)
+                .stroke(cardColor.opacity(0.15), lineWidth: 1)
+        )
+        .cornerRadius(16)
+        .shadow(color: cardColor.opacity(0.08), radius: 8, y: 4)
     }
 }
 
@@ -346,8 +371,11 @@ struct FolderCardView: View {
             Image(systemName: folder.icon)
                 .font(.title3)
                 .foregroundStyle(.tint)
+                .frame(width: 36, height: 36)
+                .background(.tint.opacity(0.1))
+                .cornerRadius(10)
 
-            VStack(alignment: .leading, spacing: 2) {
+            VStack(alignment: .leading, spacing: 3) {
                 Text(folder.name)
                     .font(.subheadline)
                     .fontWeight(.medium)
@@ -358,10 +386,14 @@ struct FolderCardView: View {
             }
 
             Spacer(minLength: 0)
+
+            Image(systemName: "chevron.forward")
+                .font(.caption)
+                .foregroundStyle(.tertiary)
         }
-        .padding(12)
+        .padding(14)
         .background(Color(.systemBackground))
-        .cornerRadius(14)
-        .shadow(color: .black.opacity(0.04), radius: 4, y: 2)
+        .cornerRadius(16)
+        .shadow(color: .black.opacity(0.04), radius: 8, y: 4)
     }
 }

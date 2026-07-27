@@ -9,11 +9,18 @@ struct NoteRowView: View {
         return formatter.localizedString(for: note.updatedAt, relativeTo: Date())
     }
 
+    private var accentColor: Color {
+        Color(hex: note.colorHex) ?? .blue
+    }
+
     var body: some View {
-        HStack(spacing: 12) {
+        HStack(spacing: 14) {
             if !note.emoji.isEmpty {
                 Text(note.emoji)
-                    .font(.title)
+                    .font(.title2)
+                    .frame(width: 36, height: 36)
+                    .background(accentColor.opacity(0.1))
+                    .cornerRadius(10)
             }
 
             VStack(alignment: .leading, spacing: 4) {
@@ -44,7 +51,7 @@ struct NoteRowView: View {
                         .lineLimit(2)
                 }
 
-                HStack(spacing: 8) {
+                HStack(spacing: 10) {
                     Label(dateText, systemImage: "clock")
                         .font(.caption)
                         .foregroundStyle(.tertiary)
@@ -54,32 +61,26 @@ struct NoteRowView: View {
                             Text(tag.name)
                                 .font(.caption2)
                                 .foregroundStyle(.white)
-                                .padding(.horizontal, 6)
+                                .padding(.horizontal, 7)
                                 .padding(.vertical, 2)
                                 .background(Color(hex: tag.colorHex) ?? .blue)
-                                .cornerRadius(4)
+                                .cornerRadius(5)
                         }
                     }
 
                     if note.wordCount > 0 {
-                        Text("\(note.wordCount) words")
-                            .font(.caption)
-                            .foregroundStyle(.tertiary)
-                    }
-
-                    if note.readingTime > 0 {
-                        Text("\(note.readingTime) min read")
+                        Label("\(note.wordCount) words", systemImage: "text.word.count")
                             .font(.caption)
                             .foregroundStyle(.tertiary)
                     }
                 }
             }
         }
-        .padding(.vertical, 4)
-        .padding(.leading, note.colorHex.isEmpty ? 0 : 4)
+        .padding(.vertical, 6)
+        .padding(.leading, 8)
         .overlay(
             Rectangle()
-                .fill(Color(hex: note.colorHex) ?? .clear)
+                .fill(accentColor)
                 .frame(width: 4)
                 .cornerRadius(2),
             alignment: .leading
