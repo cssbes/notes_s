@@ -35,33 +35,32 @@ jobs:
             CODE_SIGNING_ALLOWED=NO \
             PROVISIONING_PROFILE_SPECIFIER="" | tee "$RUNNER_TEMP/build.log"
 
-      - name: Export unsigned IPA
+      - name: Create unsigned IPA manually
         run: |
-          set -o pipefail
-          xcodebuild -exportArchive \
-            -archivePath "$RUNNER_TEMP/notes_s.xcarchive" \
-            -exportPath "$RUNNER_TEMP/ipa" \
-            -exportOptionsPlist ExportOptions.plist | tee "$RUNNER_TEMP/export.log"
-
-      - name: List export directory
-        if: always()
-        run: |
-          echo "RUNNER_TEMP=$RUNNER_TEMP"
-          echo "Contents of ipa dir:"
-          ls -la "$RUNNER_TEMP/ipa/" 2>&1 || echo "No ipa dir"
-          echo "Looking for any .ipa:"
-          find "$RUNNER_TEMP" -name "*.ipa" 2>/dev/null
+          mkdir -p "$RUNNER_TEMP/ipa/Payload"
+          APP=$(ls "$RUNNER_TEMP/notes_s.xcarchive/Products/Applications/" 2>/dev/null | head -1)
+          if [ -z "$APP" ]; then
+            echo "No .app found in archive"
+            ls -la "$RUNNER_TEMP/notes_s.xcarchive/Products/Applications/" 2>/dev/null || true
+            ls -la "$RUNNER_TEMP/notes_s.xcarchive/Products/" 2>/dev/null || true
+            exit 1
+          fi
+          cp -r "$RUNNER_TEMP/notes_s.xcarchive/Products/Applications/$APP" "$RUNNER_TEMP/ipa/Payload/"
+          cd "$RUNNER_TEMP/ipa"
+          zip -r "notes_s.ipa" "Payload" -x "._*" -x ".DS_Store"
+          echo "IPA created at: $RUNNER_TEMP/ipa/notes_s.ipa"
+          ls -la "$RUNNER_TEMP/ipa/notes_s.ipa"
 
       - name: Upload IPA as artifact
         uses: actions/upload-artifact@v4
         with:
           name: notes_s-unsigned
-          path: ${{ runner.temp }}/ipa/
+          path: ${{ runner.temp }}/ipa/notes_s.ipa
 
       - name: Show errors on failure
         if: failure()
         run: |
           echo "=== BUILD ERRORS ==="
           grep -n "error:" "$RUNNER_TEMP/build.log" 2>/dev/null | head -30
-          echo "=== EXPORT ERRORS ==="
-          grep -n "error:" "$RUNNER_TEMP/export.log" 2>/dev/null | head -30
+          echo "=== ARCHIVE CONTENTS ==="
+          find "$RUNNER_TEMP/notes_s.xcarchive" -maxdepth 4 -type d 2>/dev/null || echo "No archive"
