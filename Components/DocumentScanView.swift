@@ -18,7 +18,7 @@ struct DocumentScanView: UIViewControllerRepresentable {
         Coordinator(self)
     }
 
-    @MainActor class Coordinator: NSObject, VNDocumentCameraViewControllerDelegate {
+    nonisolated class Coordinator: NSObject, VNDocumentCameraViewControllerDelegate {
         let parent: DocumentScanView
         init(_ parent: DocumentScanView) { self.parent = parent }
 
@@ -27,7 +27,9 @@ struct DocumentScanView: UIViewControllerRepresentable {
             for i in 0..<scan.pageCount {
                 images.append(scan.imageOfPage(at: i))
             }
-            parent.onScan(images)
+            Task { @MainActor in
+                parent.onScan(images)
+            }
         }
     }
 }

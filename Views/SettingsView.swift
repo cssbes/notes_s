@@ -37,12 +37,7 @@ struct SettingsView: View {
                 } header: { Text("Appearance").textCase(.uppercase).font(.system(size: 12, weight: .semibold)).foregroundStyle(Color.nSecondary) }
 
                 Section {
-                    Picker("Language", selection: $viewModel.language) {
-                        let cases = AppLanguage.allCases
-                        ForEach(cases) { lang in
-                            Text(lang.displayName).tag(lang)
-                        }
-                    }
+                    languagePicker
                     .onChange(of: viewModel.language) { _, _ in viewModel.saveLanguage(); updateLocale() }
                 } header: { Text("Language").textCase(.uppercase).font(.system(size: 12, weight: .semibold)).foregroundStyle(Color.nSecondary) }
 
@@ -113,6 +108,15 @@ struct SettingsView: View {
             .onChange(of: viewModel.successMessage) { _, newValue in if let msg = newValue { successText = msg; showSuccessAlert = true; viewModel.successMessage = nil } }
             .sheet(isPresented: $showInsights) {
                 InsightsView(insights: InsightsService(noteService: coordinator.container.noteService))
+            }
+        }
+    }
+
+    @ViewBuilder private var languagePicker: some View {
+        let cases = AppLanguage.allCases
+        Picker("Language", selection: $viewModel.language) {
+            ForEach(cases) { lang in
+                Text(lang.displayName).tag(lang)
             }
         }
     }
