@@ -198,7 +198,7 @@ private struct SecurityToggle: View {
         }
         .onChange(of: lockEnabled) { _, newValue in
             if newValue {
-                Task { await LockService.shared.authenticate(reason: "Enable lock"); lockEnabled = LockService.shared.isEnabled }
+                Task { _ = await LockService.shared.authenticate(reason: "Enable lock"); lockEnabled = LockService.shared.isEnabled }
             } else {
                 LockService.shared.isEnabled = false
             }

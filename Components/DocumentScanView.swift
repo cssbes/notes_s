@@ -27,8 +27,9 @@ struct DocumentScanView: UIViewControllerRepresentable {
             for i in 0..<scan.pageCount {
                 images.append(scan.imageOfPage(at: i))
             }
+            let p = parent
             Task { @MainActor in
-                parent.onScan(images)
+                p.onScan(images)
             }
         }
     }
