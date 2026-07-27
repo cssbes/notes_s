@@ -75,6 +75,8 @@
 		10000061 /* View+Biometric.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000062; };
 		10000062 /* InsightsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000063; };
 		10000063 /* TemplatePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000064; };
+		10000064 /* NotesShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000065; };
+		10000065 /* NotesShortcutsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00000066; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -148,6 +150,8 @@
 		00000062 /* View+Biometric.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Biometric.swift"; sourceTree = "<group>"; };
 		00000063 /* InsightsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsightsView.swift; sourceTree = "<group>"; };
 		00000064 /* TemplatePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplatePickerView.swift; sourceTree = "<group>"; };
+		00000065 /* NotesShortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesShortcuts.swift; sourceTree = "<group>"; };
+		00000066 /* NotesShortcutsProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesShortcutsProvider.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -178,6 +182,7 @@
 				30000009 /* Persistence */,
 				30000010 /* Extensions */,
 				30000011 /* Utilities */,
+				30000013 /* Intents */,
 				30000012 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -325,6 +330,15 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		30000013 /* Intents */ = {
+			isa = PBXGroup;
+			children = (
+				00000065 /* NotesShortcuts.swift */,
+				00000066 /* NotesShortcutsProvider.swift */,
+			);
+			path = Intents;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -457,6 +471,8 @@
 				10000061 /* View+Biometric.swift in Sources */,
 				10000062 /* InsightsView.swift in Sources */,
 				10000063 /* TemplatePickerView.swift in Sources */,
+				10000064 /* NotesShortcuts.swift in Sources */,
+				10000065 /* NotesShortcutsProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
