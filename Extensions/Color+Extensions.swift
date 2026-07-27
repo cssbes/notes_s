@@ -49,14 +49,4 @@ extension Color {
     static var premiumBackground: Color {
         Color(.systemGroupedBackground)
     }
-
-    static func dynamicColor(light: Color, dark: Color) -> Color {
-        Color(light: light, dark: dark)
-    }
-
-    init(light: Color, dark: Color) {
-        self.init { trait in
-            trait.userInterfaceStyle == .dark ? dark : light
-        }
-    }
 }
